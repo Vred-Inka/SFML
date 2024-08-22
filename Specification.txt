@@ -1,0 +1,11 @@
+https://www.sfml-dev.org/tutorials/2.6/
+
+Program Specification:
+
+Program which will read description of shapes from configuration file, and then drawing those shapes to the screen. Each shape will have a name, position, speed, color, as well as properties unique for each shape type.
+
+The position of a shape refers to it's SFML default of the upper left corner of the shape.
+
+Shapes have to "bounce" off the sides of the window which contains them. If left side hits hits the left side of the window, its X speed reverses. If the top of the shape hits top of the window, its Y speed reverses.  
+
+Each shape's name should bedrawn on the exact center of the shape in the given font size and color specified in the file.  
