@@ -9,6 +9,8 @@ using namespace std;
 #include "settings.h"
 #include "CShape.h"
 #include "RShape.h"
+#include "Entity.h"
+#include "Helpers.h"
 
 std::vector<CShape> sCircles;
 std::vector<RShape> sRectangles;
@@ -95,6 +97,40 @@ void LoadConfig(MainSettings& settings)
     }
     ifs.close();
 }
+void sMovement(std::vector<Entity>& entities)
+{
+    for (Entity& e : entities)
+    {
+        if (e.cTransform)
+        {
+            e.cTransform->pos+= e.cTransform->velocity;
+        }
+    }
+}
+
+void sRender(std::vector<Entity>& entities)
+{
+    for (Entity& e : entities)
+    {
+        if (e.cTransform && e.cShape)
+        {
+            //e.cShape->shape.SetPosition(e.cTransform->pos);
+            //window.draw(e.cShape->shape);
+        }
+    }
+}
+
+
+void doStuff(std::vector<Entity>& entities)
+{
+    for (Entity& e : entities)
+    {
+        e.cTransform->pos += e.cTransform->velocity;
+        //e.cShape->shape.SetPosition(e.cTransform->pos);
+        //window.draw(e.cShape->shape);
+    }
+
+}
 
 int main()
 {
@@ -104,7 +140,7 @@ int main()
     {
         for (int y = 0; y < 20; y++)
         {
-            RectangleSettings rs(x * 10.0f, y * 10.0f, 15.0f, 15.0f);
+            RectangleSettings rs(x * 10.0f, y * 10.0f, 15, 15);
             rs.SetColor(y * 10, x * 10, y * 20);
             RShape rect(rs, settings, myFont);
             sRectangles.push_back(std::move(rect));
@@ -116,6 +152,23 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(width, height), "SFML works!");
     window.setFramerateLimit(60);
+
+
+    std::vector<Entity> entities;
+    Vec2 p{ 100, 200 }, v{ 10, 10 };
+    Entity e;
+    e.cTransform = std::make_shared<CTransform>(p, v);
+    e.cName = std::make_shared<CName>("Red Box");
+    //e.cShape = std::make_shared<CShape>();
+    entities.push_back(e);
+
+    Vec2 v1(100,300);
+    Vec2 v2(0.2f, 200);
+    Vec2 v3(10, 10);
+    v1.Add(v2).Scale(5);
+
+    float dist = v3.Dist(v1);
+
 
     float circleMoveSpeed = 0.5f;
 

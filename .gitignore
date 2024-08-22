@@ -70,3 +70,13 @@ SFML_Test/x64/Release/SFML_Test.exe.recipe
 SFML_Test/x64/Release/SFML_Test.iobj
 SFML_Test/x64/Debug/shape.obj.enc
 .vs/SFML_Test/v17/Solution.VC.db
+*.vsidx
+*.db-shm
+*.db-wal
+*.opendb
+*.ipch
+*.idb
+*.pdb
+*.idb
+SFML_Test/x64/Debug/vc143.idb
+SFML_Test/x64/Debug/vc143.pdb
