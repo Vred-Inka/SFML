@@ -1,6 +1,5 @@
 #include "settings.h"
 
-
 void ShapeSettings::SetColor(int r, int g, int b) 
 { 
 	color.r = r;
@@ -15,10 +14,10 @@ CircleSettings::CircleSettings(float x, float y, float r)
     this->r = r;
 };
 
-RectangleSettings::RectangleSettings(float x, float y, int w, int h)
+RectangleSettings::RectangleSettings(float x, float y, float w, float h)
 {
     SetX(x);
     SetY(y);
-    width = w;
-    height = h;
+    m_Width = w;
+    m_Height = h;
 };

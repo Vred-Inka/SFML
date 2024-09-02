@@ -133,21 +133,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="component.cpp" />
     <ClCompile Include="CShape.cpp" />
-    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="entitymanager.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="RShape.cpp" />
+    <ClCompile Include="scollision.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="SFML_Test.cpp" />
     <ClCompile Include="Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component.h" />
+    <ClInclude Include="component.h" />
     <ClInclude Include="CShape.h" />
-    <ClInclude Include="Entity.h" />
+    <ClInclude Include="entity.h" />
+    <ClInclude Include="entitymanager.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="RShape.h" />
+    <ClInclude Include="scollision.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="Shape.h" />
   </ItemGroup>

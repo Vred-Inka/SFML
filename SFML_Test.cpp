@@ -4,6 +4,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include <chrono>
+#include <ctime>
 
 using namespace std;
 #include "settings.h"
@@ -12,11 +14,17 @@ using namespace std;
 #include "Entity.h"
 #include "Helpers.h"
 
+#include "scollision.h"
+#include "entitymanager.h"
+
 std::vector<CShape> sCircles;
 std::vector<RShape> sRectangles;
 
 sf::Font myFont;
 MainSettings settings;
+EntityManager m_EntityManager;
+uint32_t m_CurrentFrame = 0;
+
 
 void AddShape(RectangleSettings& rs)
 {
@@ -69,7 +77,7 @@ void LoadConfig(MainSettings& settings)
             {
                 std::string name;
                 float x, y, sx, sy;
-                int width, height;
+                float width, height;
                 int r, g, b;
 
                 ifs >> name >> x >> y >> sx >> sy >> r >> g >> b >> width >> height;
@@ -108,18 +116,35 @@ void sMovement(std::vector<Entity>& entities)
     }
 }
 
-void sRender(std::vector<Entity>& entities)
+void sRender(sf::RenderWindow& window)
 {
-    for (Entity& e : entities)
+    window.clear();
+
+    for (CShape& cir : sCircles)
     {
-        if (e.cTransform && e.cShape)
-        {
-            //e.cShape->shape.SetPosition(e.cTransform->pos);
-            //window.draw(e.cShape->shape);
-        }
+        cir.Draw(window);
+        cir.Move();
     }
+
+    for (RShape& rect : sRectangles)
+    {
+        rect.Draw(window);
+        rect.Move();
+    }
+
+    window.display();
 }
 
+void sEnemySpawner()
+{
+    SPEntity e = m_EntityManager.AddEntity("Enemy");
+    int min = 55;
+    int max = 85100;
+    int diff = 1 + max - min;
+    srand((unsigned)time(0));
+    float r = min + rand() % diff;
+
+}
 
 void doStuff(std::vector<Entity>& entities)
 {
@@ -135,7 +160,7 @@ void doStuff(std::vector<Entity>& entities)
 int main()
 {
     LoadConfig(settings);
-
+    
     for (int x = 0; x < 40; x++)
     {
         for (int y = 0; y < 20; y++)
@@ -154,13 +179,13 @@ int main()
     window.setFramerateLimit(60);
 
 
-    std::vector<Entity> entities;
-    Vec2 p{ 100, 200 }, v{ 10, 10 };
-    Entity e;
-    e.cTransform = std::make_shared<CTransform>(p, v);
-    e.cName = std::make_shared<CName>("Red Box");
+   // std::vector<Entity> entities;
+   // Vec2 p{ 100, 200 }, v{ 10, 10 };
+    //Entity e;
+    //e.cTransform = std::make_shared<CTransform>(p, v);
+    //e.cName = std::make_shared<CName>("Red Box");
     //e.cShape = std::make_shared<CShape>();
-    entities.push_back(e);
+    //entities.push_back(e);
 
     Vec2 v1(100,300);
     Vec2 v2(0.2f, 200);
@@ -168,10 +193,7 @@ int main()
     v1.Add(v2).Scale(5);
 
     float dist = v3.Dist(v1);
-
-
     float circleMoveSpeed = 0.5f;
-
 
 
     sf::Text text("Sample text", myFont, settings.GetFontSize());
@@ -200,22 +222,15 @@ int main()
             }
         }
 
-        window.clear();
-
-        for (CShape& cir : sCircles)
-        {
-            cir.Draw(window);
-            cir.Move();
-        }
-
-        for (RShape& rect : sRectangles)
-        {
-            rect.Draw(window);
-            rect.Move();
-        }
+        m_EntityManager.Update();
+        //sUserInput();
+        //sMovement();
+        UpdateCollisions();
+        sRender(window);
 
         window.draw(text);
-        window.display();
+
+        m_CurrentFrame++;        
     }
 
     

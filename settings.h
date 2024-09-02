@@ -5,9 +5,9 @@
 struct WindowsSettings
 {
 private:
-    std::string name;
-    int height;
-    int width;
+    std::string name = "Default";
+    int height = 0;
+    int width = 0;
 
 public:
     int GetWidth() const { return width; };
@@ -49,10 +49,10 @@ public:
 class CircleSettings : public ShapeSettings
 {
 private:
-    float r;
+    float r = 0.0f;
 
 public:
-    CircleSettings() {};
+    CircleSettings(): r(0.0f) {};
     CircleSettings(float x, float y, float r); 
 
     float GetRadius() const { return r; };
@@ -61,22 +61,22 @@ public:
 class RectangleSettings : public ShapeSettings
 {
 private:
-    float height = 0.0f;
-    float width = 0.0f;
+    float m_Height = 0.0f;
+    float m_Width = 0.0f;
 
 public:
     RectangleSettings() {};
-    RectangleSettings(float x, float y, int w, int h);
+    RectangleSettings(float x, float y, float w, float h);
 
-    float GetWidth() const { return width; };
-    float GetHeight() const { return height; };
+    float GetWidth() const { return m_Width; };
+    float GetHeight() const { return m_Height; };
 };
 
 class FontSettings
 {
 public:
-    std::string file;
-    int size = 0;
+    std::string file = "";
+    int size{ 0 };
     int r{ 0 };
     int g{ 0 };
     int b{ 0 };
