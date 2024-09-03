@@ -8,25 +8,28 @@ class Entity
 private:
 	const size_t m_Id = 0;
 	const std::string m_Tag{ "Default" };
-	bool m_Alive = true;
-
-	std::vector<Component> m_Components;	
-	Entity() {};
+	bool m_Active = true;
+	
+	//Entity() {};
 
 public:
 	std::shared_ptr<CTransform> cTransform;
-	std::shared_ptr<CName>		cName;
-	std::shared_ptr<CShape>		cShape;
-	std::shared_ptr<CBBox>		cBBox;
+	std::shared_ptr<CCollision> cCollision;
+	std::shared_ptr<CoShape>	cShape;
+	std::shared_ptr<CInput>		cInput;
+	std::shared_ptr<CScore>		cScore;
+	std::shared_ptr<CLifeSpan>	cLifeSpan;
 
 	Entity(const std::string& tag, size_t id);
 
-	const std::string& GetTag() { return m_Tag; };
+	const std::string& GetTag() const { return m_Tag; };
 
-	void MarkAsDead() { m_Alive = false; };
-	bool IsAlive() const { return m_Alive; };
 	//void AddComponent<T>(args);
 	//void GetComponent<T>(args);
+
+	void Destroy() { m_Active = false; };
+	bool IsActive() const { return m_Active; };
+	size_t GetId() const { return m_Id; };
 
 };
 

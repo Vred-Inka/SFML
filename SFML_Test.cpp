@@ -1,18 +1,25 @@
 // SFML_Test.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#include <SFML/Graphics.hpp>
+#include "game.h"
+
+int main()
+{
+    Game g("config.txt");
+    g.Run();
+}
 
 #include <iostream>
-#include <SFML/Graphics.hpp>
+
 #include <fstream>
 #include <chrono>
 #include <ctime>
-
 using namespace std;
 #include "settings.h"
 #include "CShape.h"
 #include "RShape.h"
 #include "Entity.h"
-#include "Helpers.h"
+#include "helper.h"
 
 #include "scollision.h"
 #include "entitymanager.h"
@@ -23,6 +30,7 @@ std::vector<RShape> sRectangles;
 sf::Font myFont;
 MainSettings settings;
 EntityManager m_EntityManager;
+
 uint32_t m_CurrentFrame = 0;
 
 
@@ -111,7 +119,7 @@ void sMovement(std::vector<Entity>& entities)
     {
         if (e.cTransform)
         {
-            e.cTransform->pos+= e.cTransform->velocity;
+            e.cTransform->m_Pos+= e.cTransform->m_Speed;
         }
     }
 }
@@ -142,7 +150,7 @@ void sEnemySpawner()
     int max = 85100;
     int diff = 1 + max - min;
     srand((unsigned)time(0));
-    float r = min + rand() % diff;
+    //float r = min + rand() % diff;
 
 }
 
@@ -150,14 +158,14 @@ void doStuff(std::vector<Entity>& entities)
 {
     for (Entity& e : entities)
     {
-        e.cTransform->pos += e.cTransform->velocity;
+        e.cTransform->m_Pos += e.cTransform->m_Speed;
         //e.cShape->shape.SetPosition(e.cTransform->pos);
         //window.draw(e.cShape->shape);
     }
 
 }
 
-int main()
+int main2()
 {
     LoadConfig(settings);
     

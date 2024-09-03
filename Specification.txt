@@ -8,4 +8,77 @@ The position of a shape refers to it's SFML default of the upper left corner of 
 
 Shapes have to "bounce" off the sides of the window which contains them. If left side hits hits the left side of the window, its X speed reverses. If the top of the shape hits top of the window, its Y speed reverses.  
 
-Each shape's name should bedrawn on the exact center of the shape in the given font size and color specified in the file.  
+Each shape's name should bedrawn on the exact center of the shape in the given font size and color specified in the file. 
+
+Window W H
+Width  W int
+Height H int
+
+Font F S R G B
+ Font File    F 	std::string
+ Font Size    S 	int
+ RGB color (R,G,B)  int, int, int
+ 
+Rectangle N X Y SX SY R G B W H
+Shape Name		   N    std::string
+Initial Position (X,Y)  float, float
+Initial Speed 	(SX,SY) float, float
+RGB Color		(R,G,B) int, int, int
+Size			 (W,H)	float, float
+
+Circle N X Y SX SY R G B R
+Shape Name		   N    std::string
+Initial Position (X,Y)  float, float
+Initial Speed 	(SX,SY) float, float
+RGB Color		(R,G,B) int, int, int
+Radius			   R	float
+
+Hints 
+-Store shapes to std::vector
+shape.getLocalBounds()// .top, .left, .width, .height
+-std::ifstream
+
+s.2
+
+Player: spawns from config. 
+- must spawn in the center of the screen at the beginning of the game, and after it dies (collides with an enemy)
+-moves by sprrf trad from config file in these directions: Up:W key, Left:A key, Down: S key, Right: D key
+-moves only within the bounds of the window
+-shoot the bullet toward the mouse pointer when the left mouse button is clicked. The speed, size, and lifespan of the bullets are read from the config file.
+
+Special ability:
+Right button click: 
+- multiple enemies (bullets etc) spawned by special wepon
+- entities have some unique graphic associate with them
+- a unique game mechanic is introduced via a new component
+- a "cooldown timer" must be implemented for a special weapon
+The properties for the special move are not in the config file.
+
+Enemy(s):
+-will spawn in a random location on the screen every X frames, where X is defined in the configuration file.
+-must not overlap the sides of the screen at the time of spawn.
+- shapes have random number of vertices, between a given minimum and maximum number, which is specified in a config file.
+- shapes radius will be specified in the configuration file.
+- will be given a random color upon spawning
+- will be given a random speed upon spawninf, between a minimum and maximum value specified in the file
+- when the enemy reaches the edge of the window, it should bounce off in the oposite direction of the same speed
+- when (large) enemies collide with a bullet or player, they are destroyed, and N small enemies spawn in it's place, where N is the number of verticies of the original enemy. Each small enemy must have the same number of verticies and color of the original enemy. These small entities travel outward at the angels at a fixed intervals equal to (360/verticies). 
+
+Score:
+-n*100, where N is the number of verticies enemy has. Small enemies get double this value.
+- if the player bullet kills enemy, the game score is increased by the score component of the enemy killed
+- the score should be displayed with the font specified by the config file in the top-left corner of the screen
+
+Drawing: 
+- n the render system, all entities should be given a slow rotation, which makes the game look a little nicer.
+- Any special effects which do not alter game play can be added.
+- Any Entity with a lifespan is urrently alie it should hae its Color alpha hanel set to ratio depending on how long it has left to live. For eaple if entity has a 80 frame life span, and 25 frames remaining, its alpha value should be set to (float)25/80 * 255. The alpha should go from 255 when it is first spawned, to 0  on the last frame it is alive.
+
+CUI:
+- Display options to turn off each system independantly
+- For each entity in the game, imgui should list the ID, tag, and position lists of that entity. You must display a list of all entities, as well as lists of entities by their tag. You must also have some way of destroying a given entity by interacting with the UI element associated with it.
+- You must be able to change the enemy spawn internal through the Gui
+- You must be able to manually spawn enemies in the same way through the GUI
+
+
+
