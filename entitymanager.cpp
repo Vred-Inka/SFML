@@ -60,6 +60,10 @@ const EntityVec& EntityManager::GetEntities()
 	return m_Entities;
 }
 
+EntityVec& EntityManager::GetEntitiesN()
+{
+	return m_Entities;
+}
 
 const EntityVec& EntityManager::GetEntities(const std::string& tag)
 {

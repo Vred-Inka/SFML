@@ -1,4 +1,6 @@
 #include "game.h"
+#include "imgui_internal.h"
+#include <fstream>
 
 Game::Game(const std::string& config)
 {
@@ -13,13 +15,108 @@ void Game::Init(const std::string& path)
 
 	//fin >> m_PlayerConfig.SR;
 
+	LoadConfig(path);
+
 	//set up default window parametrs
-	m_Window.create(sf::VideoMode(1280, 720), "Game 2.0");
-	m_Window.setFramerateLimit(60);
+	m_Window.create(sf::VideoMode(m_SystemConfig.H, m_SystemConfig.W), "Game 2.0");
+	m_Window.setFramerateLimit(m_SystemConfig.FPS);
+
+	if (!m_Font.loadFromFile(m_SystemConfig.Font.file))
+	{
+		std::cerr << "Could not load font!\n";
+		exit(-1);
+	}
 
 	ImGui::SFML::Init(m_Window, true);
 
 	SpawnPlayer();
+}
+
+
+void Game::LoadConfig(const std::string& path)
+{
+	std::ifstream ifs(path);
+
+	if (ifs.is_open()) {
+		std::string type;
+		ifs >> type;
+		while (!ifs.eof())
+		{
+			if (type == "Window")
+			{
+				ifs >> m_SystemConfig.H >> m_SystemConfig.W >> m_SystemConfig.FPS;
+				int fullScreen;
+				ifs >> fullScreen;
+				m_SystemConfig.FS = fullScreen > 0 ? true : false;
+				ifs >> type;
+			}
+
+			if (type == "Font")
+			{
+				ifs >> m_SystemConfig.Font.file >> m_SystemConfig.Font.S;
+				ifs >> m_SystemConfig.Font.R >> m_SystemConfig.Font.G >> m_SystemConfig.Font.B;				
+				ifs >> type;
+			}
+
+			if (type == "Player")
+			{
+				ifs >> m_PlayerConfig.SR >> m_PlayerConfig.CR >> m_PlayerConfig.S;
+				ifs >> m_PlayerConfig.FR >> m_PlayerConfig.FG >> m_PlayerConfig.FB;
+				ifs >> m_PlayerConfig.OR >> m_PlayerConfig.OG >> m_PlayerConfig.OB;
+				ifs >> m_PlayerConfig.OT >> m_PlayerConfig.V;
+
+				ifs >> type;
+				break;
+			}
+
+			/*if (type == "Circle")
+			{
+				std::string name;
+				float x, y, sx, sy, rad;
+				int r, g, b;
+
+				ifs >> name >> x >> y >> sx >> sy >> r >> g >> b >> rad;
+
+				CircleSettings cs(x, y, rad);
+				cs.SetColor(r, g, b);
+				cs.SetName(name);
+				cs.SetSpeed(sx, sy);
+				AddShape(cs);
+				ifs >> type;
+			}
+
+			if (type == "Rectangle")
+			{
+				std::string name;
+				float x, y, sx, sy;
+				float width, height;
+				int r, g, b;
+
+				ifs >> name >> x >> y >> sx >> sy >> r >> g >> b >> width >> height;
+
+				RectangleSettings rs(x, y, width, height);
+				rs.SetColor(r, g, b);
+				rs.SetName(name);
+				rs.SetSpeed(sx, sy);
+				AddShape(rs);
+				ifs >> type;
+			}
+
+			if (type == "Font")
+			{
+				ifs >> settings.mFont.file >> settings.mFont.size;
+				ifs >> settings.mFont.r >> settings.mFont.g >> settings.mFont.b;
+				if (!myFont.loadFromFile(settings.GetFontFile()))
+				{
+					std::cerr << "Could not load font!\n";
+					exit(-1);
+				}
+				ifs >> type;
+			}
+			*/
+		}
+	}
+	ifs.close();
 }
 
 void Game::Run()
@@ -35,6 +132,7 @@ void Game::Run()
 
 		//required update call to imgui
 		ImGui::SFML::Update(m_Window, m_DeltaClock.restart());
+		ImGui::ShowDemoWindow();
 
 		sEnemySpawner();
 		sMovement();
@@ -64,11 +162,17 @@ void Game::SpawnPlayer()
 
 	SPEntity entity = m_EntityManager.AddEntity("player");
 
-	//Give this entity a Transform so it spawns at (200,200) with velocity (1,1) and
-	entity->cTransform = std::make_shared<CTransform>(Vec2(200.0f, 200.0f), Vec2(1.0f, 1.0f), Vec2(1.0f, 1.0f), 0.0f);
+	entity->cTransform = std::make_shared<CTransform>(
+		Vec2(m_Window.getSize().x / 2.0f, m_Window.getSize().y / 2.0f),
+		Vec2(1.0f, 1.0f),
+		Vec2(m_PlayerConfig.S, m_PlayerConfig.S),
+		0.0f);
 
 	//The entity's shape will have radius 32, 8 sides, dark grey fill, and red outline
-	entity->cShape = std::make_shared<CoShape>(32.0f, 8, sf::Color(10, 10, 10), sf::Color(255,0,0), 3.0f);
+	entity->cShape = std::make_shared<CoShape>(m_PlayerConfig.SR, m_PlayerConfig.V,
+		sf::Color(m_PlayerConfig.FR, m_PlayerConfig.FG, m_PlayerConfig.FB),
+		sf::Color(m_PlayerConfig.OR, m_PlayerConfig.OG, m_PlayerConfig.OB),
+		m_PlayerConfig.OT);
 
 	//Add input coponent to the player so that we can use inputs
 	entity->cInput = std::make_shared<CInput>();
@@ -112,12 +216,36 @@ void Game::SpawnSpecialWeapon(SPEntity)
 
 void Game::sMovement()
 {
-	//TODO: implement all movement in this function
-	//	you should read the m_player->cInput component to determine if the player is moving
+	if (!m_Player->cShape)
+		return;
 
-	//sample movement speed update
-	m_Player->cTransform->m_Pos.x += m_Player->cTransform->m_Speed.x;
-	m_Player->cTransform->m_Pos.y += m_Player->cTransform->m_Speed.y;
+	sf::CircleShape& circle = m_Player->cShape->m_Circle;
+
+	float left = circle.getPosition().x - circle.getRadius();
+	float right = circle.getPosition().x + circle.getRadius();
+	float top = circle.getPosition().y - circle.getRadius();
+	float botton = circle.getPosition().y + circle.getRadius();
+
+	if (m_Player->cInput->m_Right && right + m_Player->cTransform->m_Speed.x < m_Window.getSize().x)
+	{
+		m_Player->cTransform->m_Pos.x += m_Player->cTransform->m_Speed.x;
+	}
+
+	if (m_Player->cInput->m_Left && left - m_Player->cTransform->m_Speed.x > 0.0f)
+	{
+		m_Player->cTransform->m_Pos.x -= m_Player->cTransform->m_Speed.x;
+	}
+
+	if (m_Player->cInput->m_Up && top - m_Player->cTransform->m_Speed.y > 0.0f)
+	{
+		m_Player->cTransform->m_Pos.y -= m_Player->cTransform->m_Speed.y;
+	}
+
+	if (m_Player->cInput->m_Down && botton + m_Player->cTransform->m_Speed.y < m_Window.getSize().y)
+	{
+		m_Player->cTransform->m_Pos.y += m_Player->cTransform->m_Speed.y;
+	}
+
 }
 
 void Game::sCollision()
@@ -155,9 +283,61 @@ void Game::sGUI()
 {
 	ImGui::Begin("Geometry Wars");
 
-	ImGui::Text("Stuff goes here");
+	//ImguiDisplayEntity(m_Player);
+
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Entity Manager"))
+		{
+			ImguiDisplayEntities();
+
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
 
 	ImGui::End();
+}
+
+void Game::ImguiDisplayEntities()
+{
+	for (SPEntity e : m_EntityManager.GetEntitiesN())
+	{
+		if (ImGui::TreeNode(e->GetTag().c_str()))
+		{
+			ImguiDisplayEntity(e);
+			ImGui::TreePop();
+		}
+	}
+}
+
+void Game::ImguiDisplayEntity(SPEntity& entity)
+{
+	//IMGUI_DEMO_MARKER("Widgets/Basic/ColorEdit3, ColorEdit4");
+	sf::CircleShape& circle = entity->cShape->m_Circle;
+	static float col1[3] = { circle.getFillColor().r / 255.0f, circle.getFillColor().g / 255.0f, circle.getFillColor().b/255.0f };
+	static float col2[4] = { circle.getOutlineColor().r / 255.0f, circle.getOutlineColor().g / 255.0f, circle.getOutlineColor().b / 255.0f };
+	ImGui::ColorEdit3(entity->GetTag().c_str(), col1 );	
+	ImGui::ColorEdit3("id", col2);
+
+	circle.setFillColor(sf::Color(IM_F32_TO_INT8_UNBOUND(col1[0]), IM_F32_TO_INT8_UNBOUND(col1[1]), IM_F32_TO_INT8_UNBOUND(col1[2])));
+	circle.setOutlineColor(sf::Color(IM_F32_TO_INT8_UNBOUND(col2[0]), IM_F32_TO_INT8_UNBOUND(col2[1]), IM_F32_TO_INT8_UNBOUND(col2[2])));
+
+	ImGui::SeparatorText("Transform");
+	static float position[4] = { entity->cTransform->m_Pos.x, entity->cTransform->m_Pos.y, 0.0f, 0.0f };
+	position[0] = entity->cTransform->m_Pos.x;
+	position[1] = entity->cTransform->m_Pos.y;
+
+	ImGui::DragFloat2("Position", position, 1.0f, circle.getRadius(), 2000.0f);
+	entity->cTransform->m_Pos = Vec2(position[0], position[1]);
+
+	static float speed[4] = { entity->cTransform->m_Speed.x, entity->cTransform->m_Speed.y, 0.0f, 0.0f };
+	speed[0] = entity->cTransform->m_Speed.x;
+	speed[1] = entity->cTransform->m_Speed.y;
+
+	ImGui::DragFloat2("Speed", speed, 1.0f, 0.0f, 100.0f);
+	entity->cTransform->m_Speed = Vec2(speed[0], speed[1]);
 }
 
 void Game::sRender()
@@ -207,8 +387,20 @@ void Game::sUserInput()
 			switch (event.key.code)
 			{
 			case sf::Keyboard::W:
+				m_Player->cInput->m_Up = true;
 				std::cout << "W Key Pressed\n";
-				//TODO: set player's input component "up" to true
+				break;
+			case sf::Keyboard::S:
+				m_Player->cInput->m_Down = true;
+				std::cout << "S Key Pressed\n";
+				break;
+			case sf::Keyboard::D:
+				m_Player->cInput->m_Right = true;
+				std::cout << "D Key Pressed\n";
+				break;
+			case sf::Keyboard::A:
+				m_Player->cInput->m_Left = true;
+				std::cout << "A Key Pressed\n";
 				break;
 			default: break;
 			}
@@ -219,8 +411,20 @@ void Game::sUserInput()
 			switch (event.key.code)
 			{
 			case sf::Keyboard::W:
+				m_Player->cInput->m_Up = false;
 				std::cout << "W Key Released\n";
-				//TODO: set player's input component "up" to false
+				break;
+			case sf::Keyboard::S:
+				m_Player->cInput->m_Down = false;
+				std::cout << "S Key Released\n";
+				break;
+			case sf::Keyboard::D:
+				m_Player->cInput->m_Right = false;
+				std::cout << "D Key Released\n";
+				break;
+			case sf::Keyboard::A:
+				m_Player->cInput->m_Left = false;
+				std::cout << "A Key Released\n";
 				break;
 			default: break;
 			}

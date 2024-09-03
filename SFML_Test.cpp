@@ -1,13 +1,5 @@
 // SFML_Test.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#include <SFML/Graphics.hpp>
-#include "game.h"
-
-int main()
-{
-    Game g("config.txt");
-    g.Run();
-}
 
 #include <iostream>
 
@@ -29,8 +21,6 @@ std::vector<RShape> sRectangles;
 
 sf::Font myFont;
 MainSettings settings;
-EntityManager m_EntityManager;
-
 uint32_t m_CurrentFrame = 0;
 
 
@@ -48,7 +38,7 @@ void AddShape(CircleSettings& cs)
 
 void LoadConfig(MainSettings& settings)
 {
-    char filename[] = "config.txt";
+    char filename[] = "config_1.txt";
     std::ifstream ifs(filename);
       
     if (ifs.is_open()) {
@@ -143,16 +133,6 @@ void sRender(sf::RenderWindow& window)
     window.display();
 }
 
-void sEnemySpawner()
-{
-    SPEntity e = m_EntityManager.AddEntity("Enemy");
-    int min = 55;
-    int max = 85100;
-    int diff = 1 + max - min;
-    srand((unsigned)time(0));
-    //float r = min + rand() % diff;
-
-}
 
 void doStuff(std::vector<Entity>& entities)
 {
@@ -185,15 +165,6 @@ int main2()
 
     sf::RenderWindow window(sf::VideoMode(width, height), "SFML works!");
     window.setFramerateLimit(60);
-
-
-   // std::vector<Entity> entities;
-   // Vec2 p{ 100, 200 }, v{ 10, 10 };
-    //Entity e;
-    //e.cTransform = std::make_shared<CTransform>(p, v);
-    //e.cName = std::make_shared<CName>("Red Box");
-    //e.cShape = std::make_shared<CShape>();
-    //entities.push_back(e);
 
     Vec2 v1(100,300);
     Vec2 v2(0.2f, 200);
@@ -230,9 +201,6 @@ int main2()
             }
         }
 
-        m_EntityManager.Update();
-        //sUserInput();
-        //sMovement();
         UpdateCollisions();
         sRender(window);
 
@@ -246,15 +214,13 @@ int main2()
     return 0;
 }
 
+#include "imgui.h"
+#include <SFML/Graphics.hpp>
+#include "game.h"
 
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+int main()
+{
+    Game g("config.txt");
+    g.Run();
+    main2();
+}

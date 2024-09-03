@@ -26,6 +26,7 @@ public:
 	void SpawnEnemy();
 
 	SPEntity AddEntity(const std::string& tag);
+	EntityVec& GetEntitiesN();
 	const EntityVec& GetEntities();
 	const EntityVec& GetEntities(const std::string& tag);  
 	const std::map<std::string, EntityVec>& GetEntityMap();

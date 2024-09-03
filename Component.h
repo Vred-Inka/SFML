@@ -8,7 +8,7 @@ class CTransform
 public:
 	Vec2 m_Pos{ 0.0f, 0.0f };
 	Vec2 m_Speed{ 0.0f, 0.0f };
-	Vec2 m_Scale{ 0.0f, 0.0f };
+	Vec2 m_Scale{ 1.0f, 1.0f };
 	double m_Angle{0.0f};
 
 	CTransform() {};

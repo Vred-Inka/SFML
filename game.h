@@ -12,6 +12,10 @@ struct PlayerConfig { int SR, CR, FR, FG, FB, OR, OG, OB, OT, V; float S; };
 struct EnemyConfig { int SR, CR, OR, OG, OB, OT, VMIN, VMAX, L, SI; float SMIN, SMAX; };
 struct BulletConfig { int SR, CR, FR, FG, FB, OR, OG, OB, OT, V, L; float S; };
 
+struct FontConfig { std::string file; int S, R, G, B; };
+struct SystemConfig { int W, H, FPS; bool FS; FontConfig Font; };
+
+
 class Game
 {
 public:
@@ -24,6 +28,7 @@ public:
 	PlayerConfig m_PlayerConfig;
 	EnemyConfig m_EnemyConfig;
 	BulletConfig m_BulletConfig;
+	SystemConfig m_SystemConfig;
 
 	sf::Clock m_DeltaClock;
 	int m_Score{0};
@@ -35,6 +40,7 @@ public:
 	bool m_IsRunning{ true };
 
 	void Init(const std::string& config);
+	void LoadConfig(const std::string& config);
 	void Update();
 	void Run();
 
@@ -55,6 +61,8 @@ public:
 	void sCollision();
 	void sLifeSpan();
 	void sGUI();
+	void ImguiDisplayEntities();
+	void ImguiDisplayEntity(SPEntity& entity);
 
 public:
 	Game(const std::string& config);
