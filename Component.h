@@ -7,13 +7,15 @@ class CTransform
 {
 public:
 	Vec2 m_Pos{ 0.0f, 0.0f };
-	Vec2 m_Speed{ 0.0f, 0.0f };
+	float m_Speed{1.0f};
+	//calc it from speed and velocity
+	Vec2 m_Velocity{ 0.0f, 0.0f };
 	Vec2 m_Scale{ 1.0f, 1.0f };
 	double m_Angle{0.0f};
 
 	CTransform() {};
-	CTransform(const Vec2& p, const Vec2& scale, const Vec2& speed, double a)
-		: m_Pos(p), m_Scale(scale), m_Speed(speed), m_Angle(a) {};
+	CTransform(const Vec2& p, const Vec2& velocity, float speed, double a)
+		: m_Pos(p), m_Velocity(velocity), m_Speed(speed), m_Angle(a) {};
 };
 
 class CoShape

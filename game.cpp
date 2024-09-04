@@ -1,6 +1,9 @@
 #include "game.h"
 #include "imgui_internal.h"
 #include <fstream>
+#include <ctime>
+
+#include <format>
 
 Game::Game(const std::string& config)
 {
@@ -9,15 +12,8 @@ Game::Game(const std::string& config)
 
 void Game::Init(const std::string& path)
 {
-	//TODO: read in config file here
-	//      use the premade PlayerConfig, EnemyConfig, BulletConfig variables
-	//std::ifstream fin(path);
-
-	//fin >> m_PlayerConfig.SR;
-
 	LoadConfig(path);
 
-	//set up default window parametrs
 	m_Window.create(sf::VideoMode(m_SystemConfig.H, m_SystemConfig.W), "Game 2.0");
 	m_Window.setFramerateLimit(m_SystemConfig.FPS);
 
@@ -57,7 +53,7 @@ void Game::LoadConfig(const std::string& path)
 				ifs >> m_SystemConfig.Font.R >> m_SystemConfig.Font.G >> m_SystemConfig.Font.B;				
 				ifs >> type;
 			}
-
+			
 			if (type == "Player")
 			{
 				ifs >> m_PlayerConfig.SR >> m_PlayerConfig.CR >> m_PlayerConfig.S;
@@ -66,54 +62,29 @@ void Game::LoadConfig(const std::string& path)
 				ifs >> m_PlayerConfig.OT >> m_PlayerConfig.V;
 
 				ifs >> type;
+			}
+
+			if (type == "Enemy")
+			{
+				ifs >> m_EnemyConfig.SR >> m_EnemyConfig.CR;
+				ifs >> m_EnemyConfig.SMIN >> m_EnemyConfig.SMAX;
+				ifs >> m_EnemyConfig.OR >> m_EnemyConfig.OG >> m_EnemyConfig.OB;
+				ifs >> m_EnemyConfig.OT >> m_EnemyConfig.VMIN >> m_EnemyConfig.VMAX;
+				ifs >> m_EnemyConfig.L >> m_EnemyConfig.SI;
+
+				ifs >> type;
+			}			
+
+			if (type == "Bullet")
+			{
+				ifs >> m_BulletConfig.SR >> m_BulletConfig.CR >> m_BulletConfig.S;
+				ifs >> m_BulletConfig.FR >> m_BulletConfig.FG >> m_BulletConfig.FB;
+				ifs >> m_BulletConfig.OR >> m_BulletConfig.OG >> m_BulletConfig.OB;
+				ifs >> m_BulletConfig.OT >> m_BulletConfig.V >> m_BulletConfig.L;
+
+				ifs >> type;
 				break;
 			}
-
-			/*if (type == "Circle")
-			{
-				std::string name;
-				float x, y, sx, sy, rad;
-				int r, g, b;
-
-				ifs >> name >> x >> y >> sx >> sy >> r >> g >> b >> rad;
-
-				CircleSettings cs(x, y, rad);
-				cs.SetColor(r, g, b);
-				cs.SetName(name);
-				cs.SetSpeed(sx, sy);
-				AddShape(cs);
-				ifs >> type;
-			}
-
-			if (type == "Rectangle")
-			{
-				std::string name;
-				float x, y, sx, sy;
-				float width, height;
-				int r, g, b;
-
-				ifs >> name >> x >> y >> sx >> sy >> r >> g >> b >> width >> height;
-
-				RectangleSettings rs(x, y, width, height);
-				rs.SetColor(r, g, b);
-				rs.SetName(name);
-				rs.SetSpeed(sx, sy);
-				AddShape(rs);
-				ifs >> type;
-			}
-
-			if (type == "Font")
-			{
-				ifs >> settings.mFont.file >> settings.mFont.size;
-				ifs >> settings.mFont.r >> settings.mFont.g >> settings.mFont.b;
-				if (!myFont.loadFromFile(settings.GetFontFile()))
-				{
-					std::cerr << "Could not load font!\n";
-					exit(-1);
-				}
-				ifs >> type;
-			}
-			*/
 		}
 	}
 	ifs.close();
@@ -127,74 +98,138 @@ void Game::Run()
 
 	while (m_IsRunning)
 	{
-		//update EnityManager
-		m_EntityManager.Update();
-
-		//required update call to imgui
-		ImGui::SFML::Update(m_Window, m_DeltaClock.restart());
-		ImGui::ShowDemoWindow();
-
-		sEnemySpawner();
-		sMovement();
-		sCollision();
-		sUserInput();
-		sGUI();
-		sRender();
-
-		//increment the current frame
-		//may need to be moved when pause implemented
+		Update();
 		m_CurrentFrame++;
 	}
 }
 
 void Game::Update()
 {
+	m_EntityManager.Update();
 
+	ImGui::SFML::Update(m_Window, m_DeltaClock.restart());
+	ImGui::ShowDemoWindow();
+
+	sEnemySpawner();
+	sMovement();
+	sCollision();
+	sUserInput();
+	sLifeSpan();
+	sGUI();
+	sRender();
 }
 
 //respawn the  player in the middle of the screen
 void Game::SpawnPlayer()
 {
-	//TODOL finish adding all properties of the player with the correct values from config
-
-	//We create everyentity by calling EntityManager.AddEntity(tag)
-	//This returns a std::shared_ptr<Entity>, so we use auto to save typing
-
 	SPEntity entity = m_EntityManager.AddEntity("player");
 
 	entity->cTransform = std::make_shared<CTransform>(
 		Vec2(m_Window.getSize().x / 2.0f, m_Window.getSize().y / 2.0f),
-		Vec2(1.0f, 1.0f),
 		Vec2(m_PlayerConfig.S, m_PlayerConfig.S),
+		m_PlayerConfig.S,
 		0.0f);
 
-	//The entity's shape will have radius 32, 8 sides, dark grey fill, and red outline
 	entity->cShape = std::make_shared<CoShape>(m_PlayerConfig.SR, m_PlayerConfig.V,
 		sf::Color(m_PlayerConfig.FR, m_PlayerConfig.FG, m_PlayerConfig.FB),
 		sf::Color(m_PlayerConfig.OR, m_PlayerConfig.OG, m_PlayerConfig.OB),
 		m_PlayerConfig.OT);
 
-	//Add input coponent to the player so that we can use inputs
-	entity->cInput = std::make_shared<CInput>();
+	entity->cCollision = std::make_shared<CCollision>(m_PlayerConfig.CR);
 
-	//sinse we want this entity to be our player, set our Game's player variable to this Entity
-	//This goes slightly against EntityManager paradism, but we use the player so much it's 
+	entity->cInput = std::make_shared<CInput>();
 	m_Player = entity;
 }
 
-//spawn an enemy at a random position
+template <typename T>
+T get_random(T min, T max)
+{
+	static std::default_random_engine e;
+	std::uniform_real_distribution<> dis(min, max+1); // range [0, 1)
+	return dis(e);
+}
+
 void Game::SpawnEnemy()
 {
-	//TODO: make sure the enemy is spawned properly with the m_enemyConfig variable
-	//	the enemy must be spawned completely within the bounds of the windows
+	SPEntity entity = m_EntityManager.AddEntity("enemy");
+
+	int x = get_random(m_EnemyConfig.SR, (int)m_Window.getSize().x - m_EnemyConfig.SR);
+	int y = get_random(m_EnemyConfig.SR, (int)m_Window.getSize().y - m_EnemyConfig.SR);
+	float speed = get_random(m_EnemyConfig.SMIN, m_EnemyConfig.SMAX);
+	float angel = get_random(0.0f, 1.0f);
+
+	entity->cTransform = std::make_shared<CTransform>(
+		Vec2(x, y),
+		//Vec2(1.0f, 1.0f),
+		Vec2(speed, speed),
+		speed,
+		angel);
+
+	int v = get_random(m_EnemyConfig.VMIN, m_EnemyConfig.VMAX);
+	sf::Color color(get_random(0,255), get_random(0, 255), get_random(0, 255));
+	entity->cShape = std::make_shared<CoShape>(
+		m_EnemyConfig.SR, 
+		v,
+		color,
+		sf::Color(m_EnemyConfig.OR, m_EnemyConfig.OG, m_EnemyConfig.OB),
+		m_EnemyConfig.OT);
+
+	entity->cLifeSpan = std::make_shared<CLifeSpan>(m_EnemyConfig.L);
+	entity->cCollision = std::make_shared<CCollision>(m_EnemyConfig.CR);
 
 	//record when the most recent enemy was spawned
 	m_LastEnemySpawnedTime = m_CurrentFrame;
 }
 
 //spawn the small enemies when a big one (input entity e) explodes
-void Game::SpawnSmallEnemies(SPEntity e)
+void Game::SpawnSmallEnemies(SPEntity& e)
 {
+	if (e->GetTag() == "small_enemy")
+		return;
+
+	int v = e->cShape->m_Circle.getPointCount();
+	sf::CircleShape& circle = e->cShape->m_Circle;
+
+	for (size_t i = 0; i < circle.getPointCount(); i++)
+	{
+		SPEntity entity = m_EntityManager.AddEntity("small_enemy");
+		float angel = (1.0f / v) * i;
+
+		//Vec2 d{ e->cTransform->m_Pos.x - cTransform->m_Pos.x,
+		//	e->cTransform->m_Pos.y - cTransform->m_Pos.y };
+
+		//float r = cCollision->m_Radius + e.cCollision->m_Radius;
+		//double at = atan2f(d.y, d.x);
+
+		//return d.x * d.x + d.y * d.y < r * r;
+
+		//vec2 velocity{e->cTransform->m_Speed * cos(),e->cTransform->m_Speed * sin()}
+
+
+		entity->cTransform = std::make_shared<CTransform>(
+			e->cTransform->m_Pos,
+			//e->cTransform->m_Scale,
+			e->cTransform->m_Velocity,
+			e->cTransform->m_Speed,
+			angel);
+
+		entity->cShape = std::make_shared<CoShape>(
+			circle.getRadius() / 2,
+			v,
+			circle.getFillColor(),
+			circle.getFillColor(),
+			circle.getOutlineThickness());
+
+		if (e->cCollision)
+		{
+			entity->cCollision = std::make_shared<CCollision>(e->cCollision->m_Radius / 2);
+		}
+
+		if (e->cLifeSpan)
+		{
+			entity->cLifeSpan = std::make_shared<CLifeSpan>(e->cLifeSpan->m_Total);
+		}
+	}
 	//when we create the smaller enemy, we have to read the values of the original
 	// - spawn a number of small enemies equal to the vertices of the original enemy
 	// - set each small enemy to the same color as the original, half the size
@@ -214,7 +249,7 @@ void Game::SpawnSpecialWeapon(SPEntity)
 	//TODO: implement
 }
 
-void Game::sMovement()
+void Game::UpdatePlayerMove()
 {
 	if (!m_Player->cShape)
 		return;
@@ -226,30 +261,88 @@ void Game::sMovement()
 	float top = circle.getPosition().y - circle.getRadius();
 	float botton = circle.getPosition().y + circle.getRadius();
 
-	if (m_Player->cInput->m_Right && right + m_Player->cTransform->m_Speed.x < m_Window.getSize().x)
+	if (m_Player->cInput->m_Right && right + m_Player->cTransform->m_Velocity.x < m_Window.getSize().x)
 	{
-		m_Player->cTransform->m_Pos.x += m_Player->cTransform->m_Speed.x;
+		m_Player->cTransform->m_Pos.x += m_Player->cTransform->m_Velocity.x;
 	}
 
-	if (m_Player->cInput->m_Left && left - m_Player->cTransform->m_Speed.x > 0.0f)
+	if (m_Player->cInput->m_Left && left - m_Player->cTransform->m_Velocity.x > 0.0f)
 	{
-		m_Player->cTransform->m_Pos.x -= m_Player->cTransform->m_Speed.x;
+		m_Player->cTransform->m_Pos.x -= m_Player->cTransform->m_Velocity.x;
 	}
 
-	if (m_Player->cInput->m_Up && top - m_Player->cTransform->m_Speed.y > 0.0f)
+	if (m_Player->cInput->m_Up && top - m_Player->cTransform->m_Velocity.y > 0.0f)
 	{
-		m_Player->cTransform->m_Pos.y -= m_Player->cTransform->m_Speed.y;
+		m_Player->cTransform->m_Pos.y -= m_Player->cTransform->m_Velocity.y;
 	}
 
-	if (m_Player->cInput->m_Down && botton + m_Player->cTransform->m_Speed.y < m_Window.getSize().y)
+	if (m_Player->cInput->m_Down && botton + m_Player->cTransform->m_Velocity.y < m_Window.getSize().y)
 	{
-		m_Player->cTransform->m_Pos.y += m_Player->cTransform->m_Speed.y;
+		m_Player->cTransform->m_Pos.y += m_Player->cTransform->m_Velocity.y;
+	}
+}
+
+void Game::UpdateEntitiesMove()
+{
+	for ( SPEntity& e : m_EntityManager.GetEntitiesN())
+	{
+		if (e->GetTag() == "player")
+			continue;
+
+		UpdateEnemyMove(e);
+	}
+}
+
+void Game::UpdateEnemyMove(SPEntity& e)
+{
+	if (!e->cShape)
+		return;
+
+	sf::CircleShape& circle = e->cShape->m_Circle;
+
+	float left = circle.getPosition().x - circle.getRadius();
+	float right = circle.getPosition().x + circle.getRadius();
+	float top = circle.getPosition().y - circle.getRadius();
+	float botton = circle.getPosition().y + circle.getRadius();
+
+	if (left <= 0 || right >= m_Window.getSize().x)
+	{
+		e->cTransform->m_Velocity.x *= -1.0f;
 	}
 
+	if (top <= 0 || botton >= m_Window.getSize().y)
+	{
+		e->cTransform->m_Velocity.y *= -1.0f;
+	}
+
+	e->cTransform->m_Pos.x += e->cTransform->m_Velocity.x;
+	e->cTransform->m_Pos.y -= e->cTransform->m_Velocity.y;
+}
+
+void Game::sMovement()
+{
+	UpdatePlayerMove();
+	UpdateEntitiesMove();
 }
 
 void Game::sCollision()
 {
+	for (SPEntity& e : m_EntityManager.GetEntitiesN())
+	{
+		if (e->GetTag() == "player")
+			continue;
+		
+		if (!e->IsActive())
+			continue;
+
+		if (m_Player->HasCollision(*e))
+		{
+			e->Destroy();
+			SpawnSmallEnemies(e);
+		}
+	}
+
+
 	for (auto bullet : m_EntityManager.GetEntities("bullet"))
 	{
 
@@ -262,21 +355,50 @@ void Game::sCollision()
 
 void Game::sEnemySpawner()
 {
-	//TODO Implement enemy spawner
+	if (m_IsPaused)
+		return;
+
+	if ( m_EntityManager.GetEntities().size() >= m_MaxEntitiesAmount )
+		return;
+
+	if (m_CurrentFrame - m_LastEnemySpawnedTime < m_EnemyConfig.SI)
+		return;
+
+	SpawnEnemy();
+}
+
+void Game::UpdateLife(SPEntity& e)
+{
+	if (!e->IsActive())
+		return;
+
+	if (!e->cLifeSpan)
+		return;
+
+	e->cLifeSpan->m_Remaining--;
+
+	if (e->cLifeSpan->m_Remaining == 0)
+	{
+		e->Destroy();
+	}
+
+	float opacity = 255 * ((float)e->cLifeSpan->m_Remaining / (float)e->cLifeSpan->m_Total);
+
+	sf::Color fillcolor = e->cShape->m_Circle.getFillColor();
+	fillcolor.a = opacity;
+	e->cShape->m_Circle.setFillColor(fillcolor);
+
+	sf::Color outlinecolor = e->cShape->m_Circle.getFillColor();
+	outlinecolor.a = opacity;	
+	e->cShape->m_Circle.setOutlineColor(outlinecolor);
 }
 
 void Game::sLifeSpan()
 {
-	//TODO: Implement all lifespan functionallity
-	//
-	//for all entities
-	// if entity has no lifespan component, skip it
-	// if entity has > 0 remaning lifespan, substruct 1
-	// if it has lifespan and is alive
-	//	scale it's alpha chanel properly
-	// if it has lifespan and it's timme is up
-	//	destroy the entity
-
+	for (SPEntity& e : m_EntityManager.GetEntitiesN())
+	{
+		UpdateLife(e);
+	}
 }
 
 void Game::sGUI()
@@ -290,7 +412,30 @@ void Game::sGUI()
 	{
 		if (ImGui::BeginTabItem("Entity Manager"))
 		{
+			std::string msg = std::format("Entity amount {}", m_EntityManager.GetEntities().size());
+			ImGui::Text(msg.c_str(), m_EntityManager.GetEntities().size());
 			ImguiDisplayEntities();
+
+			ImGui::EndTabItem();
+		}
+		
+		if (ImGui::BeginTabItem("System"))
+		{
+			static bool is_paused = m_IsPaused;
+			ImGui::Checkbox("Pause flag", &is_paused);
+			m_IsPaused = is_paused;
+
+			static int enemy_amount = m_MaxEntitiesAmount;
+			ImGui::DragInt("Entity amount", &enemy_amount, 1, 1, 1000, "%d", ImGuiSliderFlags_AlwaysClamp);
+			m_MaxEntitiesAmount = enemy_amount;
+
+			static int enemy_life_amount = m_EnemyConfig.L;
+			ImGui::DragInt("Enemy life amount", &enemy_life_amount, 1, 1, 1000, "%d", ImGuiSliderFlags_AlwaysClamp);
+			m_EnemyConfig.L = enemy_amount;
+
+			static int enemy_spawn_interval = m_EnemyConfig.SI;
+			ImGui::DragInt("Enemy spawn interwal", &enemy_spawn_interval, 1, 1, 1000, "%d", ImGuiSliderFlags_AlwaysClamp);
+			m_EnemyConfig.SI = enemy_spawn_interval;
 
 			ImGui::EndTabItem();
 		}
@@ -332,29 +477,33 @@ void Game::ImguiDisplayEntity(SPEntity& entity)
 	ImGui::DragFloat2("Position", position, 1.0f, circle.getRadius(), 2000.0f);
 	entity->cTransform->m_Pos = Vec2(position[0], position[1]);
 
-	static float speed[4] = { entity->cTransform->m_Speed.x, entity->cTransform->m_Speed.y, 0.0f, 0.0f };
-	speed[0] = entity->cTransform->m_Speed.x;
-	speed[1] = entity->cTransform->m_Speed.y;
+	static float speed[4] = { entity->cTransform->m_Velocity.x, entity->cTransform->m_Velocity.y, 0.0f, 0.0f };
+	speed[0] = entity->cTransform->m_Velocity.x;
+	speed[1] = entity->cTransform->m_Velocity.y;
 
 	ImGui::DragFloat2("Speed", speed, 1.0f, 0.0f, 100.0f);
-	entity->cTransform->m_Speed = Vec2(speed[0], speed[1]);
+	entity->cTransform->m_Velocity = Vec2(speed[0], speed[1]);
+}
+
+void Game::DrawEntity(SPEntity& e)
+{
+	e->cShape->m_Circle.setPosition(e->cTransform->m_Pos.x, e->cTransform->m_Pos.y);
+	e->cTransform->m_Angle += 1.0f;
+	e->cShape->m_Circle.setRotation((float)e->cTransform->m_Angle);
+
+	m_Window.draw(e->cShape->m_Circle);
 }
 
 void Game::sRender()
 {
-	//TODO: change the code below to draw ALL of the entities
-	//	sample drawing of the player Entity that we have created
 	m_Window.clear();
 
-	//set the position of the shape based on the entity's transform->pos
-	m_Player->cShape->m_Circle.setPosition(m_Player->cTransform->m_Pos.x, m_Player->cTransform->m_Pos.y);
+	DrawEntity(m_Player);
 
-	//set the rotation of the shape based on the entity's transform->angle
-	m_Player->cTransform->m_Angle += 1.0f;
-	m_Player->cShape->m_Circle.setRotation((float)m_Player->cTransform->m_Angle);
-
-	//draw the entity's sf::CircleShape
-	m_Window.draw(m_Player->cShape->m_Circle);
+	for (SPEntity& e : m_EntityManager.GetEntitiesN())
+	{
+		DrawEntity(e);
+	}
 
 	//draw the ui last
 	ImGui::SFML::Render(m_Window);

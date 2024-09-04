@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "helper.h"
+#include <random>
 
 #include "entitymanager.h"
 #include "imgui/imgui.h"
@@ -14,7 +15,6 @@ struct BulletConfig { int SR, CR, FR, FG, FB, OR, OG, OB, OT, V, L; float S; };
 
 struct FontConfig { std::string file; int S, R, G, B; };
 struct SystemConfig { int W, H, FPS; bool FS; FontConfig Font; };
-
 
 class Game
 {
@@ -36,6 +36,8 @@ public:
 
 	int m_LastEnemySpawnedTime{ 0 };
 
+	int m_MaxEntitiesAmount = 100;
+
 	bool m_IsPaused{ false };
 	bool m_IsRunning{ true };
 
@@ -48,10 +50,18 @@ public:
 
 	void SpawnPlayer();
 	void SpawnEnemy();
-	void SpawnSmallEnemies(SPEntity e);
+	void SpawnSmallEnemies(SPEntity& e);
 
 	void SpawnBullet(SPEntity& entity, const Vec2& target);
 	void SpawnSpecialWeapon(SPEntity);
+
+	void UpdatePlayerMove();
+	void UpdateEntitiesMove();
+	void UpdateEnemyMove(SPEntity& e);
+
+	void UpdateLife(SPEntity& e);
+
+	void DrawEntity(SPEntity& e);
 
 	//Systes
 	void sMovement();

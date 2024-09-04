@@ -78,9 +78,6 @@
     <ClCompile Include="SFML_Test.cpp">
       <Filter>Header Files\game</Filter>
     </ClCompile>
-    <ClCompile Include="spec1.cpp">
-      <Filter>Header Files\game</Filter>
-    </ClCompile>
     <ClCompile Include="RShape.cpp">
       <Filter>Header Files\shapes</Filter>
     </ClCompile>

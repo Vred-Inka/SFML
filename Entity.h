@@ -31,5 +31,7 @@ public:
 	bool IsActive() const { return m_Active; };
 	size_t GetId() const { return m_Id; };
 
+	bool HasCollision(Entity& e);
+
 };
 

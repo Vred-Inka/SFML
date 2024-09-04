@@ -23,7 +23,6 @@ public:
 	void Update();
 
 	void KillEntity(const std::string& tag);
-	void SpawnEnemy();
 
 	SPEntity AddEntity(const std::string& tag);
 	EntityVec& GetEntitiesN();

@@ -7,7 +7,6 @@ EntityManager::EntityManager()
 
 void EntityManager::Update()
 {
-
 	for (std::shared_ptr<Entity>& e : m_EntitiesToAdd)
 	{
 		m_Entities.push_back(e);
@@ -17,7 +16,16 @@ void EntityManager::Update()
 	m_EntitiesToAdd.clear();
 
 	//remove dead entities from the vector of all entities
-	RemoveDeadEntities(m_Entities);
+	RemoveDeadEntities(m_Entities);	
+}
+
+//TODO
+void EntityManager::RemoveDeadEntities(EntityVec& vec)
+{
+	vec.erase(std::remove_if(vec.begin(),
+		vec.end(),
+		[](SPEntity& e) { return !e->IsActive(); }),
+		vec.end());
 
 	//reove dead entities from eacch vector in the entitie map
 	//c++20 way inerating through [key, value] pairs in a map
@@ -27,23 +35,6 @@ void EntityManager::Update()
 	}
 	*/
 
-	//clear entity that is not alive
-	for (std::shared_ptr<Entity>& e : m_Entities)
-	{
-		//TODO removing with remove if
-
-		if (!e->IsActive())
-		{
-			//m_Entities.erase(e)
-			//m_Entities.erase(e);
-			//m_EntityMap[e->GetTag()].push_back(e);
-		}
-	}
-}
-
-//TODO
-void EntityManager::RemoveDeadEntities(EntityVec& vec)
-{
 	//TODO: remove all dead entities from the input vec
 	// this is called by update() function
 }
@@ -85,12 +76,4 @@ void EntityManager::KillEntity(const std::string& tag)
 			e->Destroy();
 		}
 	}
-}
-
-
-void EntityManager::SpawnEnemy()
-{
-	SPEntity e = AddEntity("enemy");
-	//e->cTransform = std::make_shared<CTransform>(args);
-	//e->cShape = std::make_shared<CShape>(args);
 }

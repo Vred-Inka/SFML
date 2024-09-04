@@ -154,7 +154,6 @@
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="SFML_Test.cpp" />
     <ClCompile Include="Shape.cpp" />
-    <ClCompile Include="spec1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="component.h" />
