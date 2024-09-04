@@ -16,39 +16,30 @@
     <Filter Include="Header Files\entity">
       <UniqueIdentifier>{b25fb963-e3f6-4991-b60c-bf64ee02c982}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\entity">
-      <UniqueIdentifier>{c2e72de5-a17c-4992-a89c-27cd05cdd3e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\system">
       <UniqueIdentifier>{83c26408-c764-461f-b930-9f56c1544b94}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\helper">
       <UniqueIdentifier>{ec39e9ab-055e-4352-9f72-67b4641c9d4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game">
+      <UniqueIdentifier>{da7e2452-9965-4b2f-8f1b-98815f65b579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\entity\imgui">
+      <UniqueIdentifier>{a7a1b58e-e6b6-460f-ae60-fc8df1e71627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shapes">
+      <UniqueIdentifier>{81c564fd-90cd-4388-8d05-252a28f96388}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dll">
+      <UniqueIdentifier>{06590805-afa6-4e37-9578-e0556a2c1775}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SFML_Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RShape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CShape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scollision.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="entity.cpp">
@@ -60,33 +51,48 @@
     <ClCompile Include="helper.cpp">
       <Filter>Header Files\helper</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_tables.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="game.cpp">
+      <Filter>Header Files\game</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui-SFML.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="scollision.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SFML_Test.cpp">
+      <Filter>Header Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="spec1.cpp">
+      <Filter>Header Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="RShape.cpp">
+      <Filter>Header Files\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="CShape.cpp">
+      <Filter>Header Files\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Header Files\shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RShape.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Shape.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="settings.h">
@@ -98,9 +104,6 @@
     <ClInclude Include="scollision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="entity.h">
       <Filter>Header Files\entity</Filter>
     </ClInclude>
@@ -110,32 +113,79 @@
     <ClInclude Include="helper.h">
       <Filter>Header Files\helper</Filter>
     </ClInclude>
+    <ClInclude Include="spec1.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\entity\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\entity\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_rectpack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_truetype.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\entity\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui-SFML.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\entity\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui-SFML_export.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\entity\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\imconfig-SFML.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Header Files\entity\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Header Files\entity\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="CShape.h">
+      <Filter>Header Files\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="RShape.h">
+      <Filter>Header Files\shapes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="openal32.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-audio-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-audio-d-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-graphics-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-graphics-d-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-network-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-network-d-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-system-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-system-d-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-window-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+    <None Include="sfml-window-d-2.dll">
+      <Filter>Header Files\dll</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="imgui\LICENSE.txt" />
   </ItemGroup>
 </Project>

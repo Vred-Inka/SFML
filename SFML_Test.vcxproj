@@ -154,6 +154,7 @@
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="SFML_Test.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="spec1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="component.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="scollision.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="spec1.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="imgui\LICENSE.txt" />
