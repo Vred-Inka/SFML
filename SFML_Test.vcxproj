@@ -150,10 +150,17 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="RShape.cpp" />
-    <ClCompile Include="scollision.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="SFML_Test.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="systems\scollision.cpp" />
+    <ClCompile Include="systems\senemyspawner.cpp" />
+    <ClCompile Include="systems\sgui.cpp" />
+    <ClCompile Include="systems\slifespan.cpp" />
+    <ClCompile Include="systems\smovement.cpp" />
+    <ClCompile Include="systems\sonfigloader.cpp" />
+    <ClCompile Include="systems\srender.cpp" />
+    <ClCompile Include="systems\suserinput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="component.h" />
@@ -171,7 +178,6 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="RShape.h" />
-    <ClInclude Include="scollision.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="spec1.h" />

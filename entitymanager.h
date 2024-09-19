@@ -25,9 +25,9 @@ public:
 	void KillEntity(const std::string& tag);
 
 	SPEntity AddEntity(const std::string& tag);
-	EntityVec& GetEntitiesN();
+	EntityVec& GetAllEntities();
 	const EntityVec& GetEntities();
-	const EntityVec& GetEntities(const std::string& tag);  
+	EntityVec& GetEntities(const std::string& tag);  
 	const std::map<std::string, EntityVec>& GetEntityMap();
 
 };

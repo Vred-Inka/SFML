@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "helper.h"
 #include <random>
+#include <format>
 
 #include "entitymanager.h"
 #include "imgui/imgui.h"
@@ -36,10 +37,17 @@ public:
 
 	int m_LastEnemySpawnedTime{ 0 };
 
-	int m_MaxEntitiesAmount = 100;
+	int m_MaxEntitiesAmount{ 2 };
+	float m_MinEntityRadius{ 10.0f };
+	int m_SuperPowerCooldown{ 100 };
 
 	bool m_IsPaused{ false };
 	bool m_IsRunning{ true };
+
+	bool m_CollisionDetection{ true };
+	bool m_ImmortalEnemies{ false };
+	bool m_MovementEnabled{ true };
+	//bool m_LifeSpanEnabled{ true };
 
 	void Init(const std::string& config);
 	void LoadConfig(const std::string& config);
@@ -53,7 +61,8 @@ public:
 	void SpawnSmallEnemies(SPEntity& e);
 
 	void SpawnBullet(SPEntity& entity, const Vec2& target);
-	void SpawnSpecialWeapon(SPEntity);
+
+	void ActivateSuperpower(const Vec2& pos);
 
 	void UpdatePlayerMove();
 	void UpdateEntitiesMove();
@@ -62,6 +71,9 @@ public:
 	void UpdateLife(SPEntity& e);
 
 	void DrawEntity(SPEntity& e);
+
+	bool CollisionWithBullet(SPEntity& entity);
+	bool CollisionWithPlayer(SPEntity& entity);
 
 	//Systes
 	void sMovement();

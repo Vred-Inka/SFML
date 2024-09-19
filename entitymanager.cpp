@@ -15,28 +15,34 @@ void EntityManager::Update()
 
 	m_EntitiesToAdd.clear();
 
-	//remove dead entities from the vector of all entities
 	RemoveDeadEntities(m_Entities);	
+
+	for (auto& p : m_EntityMap)
+	{
+		RemoveDeadEntities(p.second);
+	}
 }
 
 //TODO
 void EntityManager::RemoveDeadEntities(EntityVec& vec)
-{
-	vec.erase(std::remove_if(vec.begin(),
-		vec.end(),
-		[](SPEntity& e) { return !e->IsActive(); }),
-		vec.end());
-
-	//reove dead entities from eacch vector in the entitie map
-	//c++20 way inerating through [key, value] pairs in a map
-	/*for (auto& [tag, entityVec] : m_EntityMap)
+{	
+	for (int i = vec.size() - 1; i >= 0; i--)
 	{
-		RemoveDeadEntities(entityVec);
+		if (!vec[i]->IsActive())
+		{
+			vec.erase(vec.begin() + i);
+		}
 	}
-	*/
+	
 
-	//TODO: remove all dead entities from the input vec
-	// this is called by update() function
+	/*vec.erase(std::remove_if(vec.begin(),
+		vec.end(),
+		[](SPEntity& e) 
+		{
+			return !e->IsActive();
+		}),
+		vec.end());
+		*/
 }
 
 SPEntity EntityManager::AddEntity(const std::string& tag)
@@ -51,15 +57,14 @@ const EntityVec& EntityManager::GetEntities()
 	return m_Entities;
 }
 
-EntityVec& EntityManager::GetEntitiesN()
+EntityVec& EntityManager::GetAllEntities()
 {
 	return m_Entities;
 }
 
-const EntityVec& EntityManager::GetEntities(const std::string& tag)
+EntityVec& EntityManager::GetEntities(const std::string& tag)
 {
-	//TODO: return correct vec
-	return m_Entities;
+	return m_EntityMap[tag];
 }
 
 const std::map<std::string, EntityVec>& EntityManager::GetEntityMap()

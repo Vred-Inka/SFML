@@ -33,3 +33,13 @@ public:
 	double Length();
 };
 
+static const float PI = 3.1416f;
+
+static float DegToRad(float degrees) {
+	return degrees * (PI / 180.0f);
+}
+
+static float RadToDeg(float rad) {
+	return (rad * 180.0f) / PI;
+}
+

@@ -19,3 +19,18 @@ bool Entity::HasCollision(Entity& e)
 
 	return d.x*d.x + d.y*d.y < r*r;
 }
+
+bool Entity::HasCollision(const Vec2& pos, int radius)
+{
+	if (!cCollision)
+		return false;
+
+	if (!cTransform)
+		return false;
+
+	float r = cCollision->m_Radius + radius;
+	Vec2 d{ cTransform->m_Pos.x - pos.x,
+		cTransform->m_Pos.y - pos.y};
+
+	return d.x * d.x + d.y * d.y < r * r;
+}

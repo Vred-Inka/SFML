@@ -16,9 +16,6 @@
     <Filter Include="Header Files\entity">
       <UniqueIdentifier>{b25fb963-e3f6-4991-b60c-bf64ee02c982}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\system">
-      <UniqueIdentifier>{83c26408-c764-461f-b930-9f56c1544b94}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\helper">
       <UniqueIdentifier>{ec39e9ab-055e-4352-9f72-67b4641c9d4b}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="Header Files\dll">
       <UniqueIdentifier>{06590805-afa6-4e37-9578-e0556a2c1775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems">
+      <UniqueIdentifier>{83c26408-c764-461f-b930-9f56c1544b94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +72,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Header Files\entity\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="scollision.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="SFML_Test.cpp">
       <Filter>Header Files\game</Filter>
     </ClCompile>
@@ -87,6 +84,30 @@
     <ClCompile Include="Shape.cpp">
       <Filter>Header Files\shapes</Filter>
     </ClCompile>
+    <ClCompile Include="systems\senemyspawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\sgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\slifespan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\smovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\srender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\suserinput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\sonfigloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\scollision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shape.h">
@@ -96,9 +117,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scollision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="entity.h">

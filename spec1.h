@@ -7,9 +7,6 @@
 #include "settings.h"
 #include "helper.h"
 
-//to delete
-#include "scollision.h"
-
 using namespace std;
 
 static MainSettings settings;
@@ -174,9 +171,6 @@ static int main2()
             }
         }
 
-        //sUserInput();
-        //sMovement();
-        UpdateCollisions();
         sRender(window);
 
         window.draw(text);

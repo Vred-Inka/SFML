@@ -8,14 +8,17 @@ class CTransform
 public:
 	Vec2 m_Pos{ 0.0f, 0.0f };
 	float m_Speed{1.0f};
-	//calc it from speed and velocity
 	Vec2 m_Velocity{ 0.0f, 0.0f };
 	Vec2 m_Scale{ 1.0f, 1.0f };
-	double m_Angle{0.0f};
+	float m_Angle{0.0f};
 
 	CTransform() {};
-	CTransform(const Vec2& p, const Vec2& velocity, float speed, double a)
-		: m_Pos(p), m_Velocity(velocity), m_Speed(speed), m_Angle(a) {};
+	CTransform(const Vec2& p, float speed, float a)
+		: m_Pos(p), m_Speed(speed), m_Angle(a) 
+	{
+		m_Velocity.x = m_Speed * cos(DegToRad(m_Angle));
+		m_Velocity.y = m_Speed * sin(DegToRad(m_Angle));
+	};
 };
 
 class CoShape
@@ -37,6 +40,7 @@ class CCollision
 {
 public:
 	float m_Radius{0.0f};
+	bool m_CanCollide{ true };
 	CCollision(float r) 
 		: m_Radius(r) {}
 };
@@ -68,5 +72,29 @@ public:
 	int m_Total{ 0 };
 	CLifeSpan(int total)
 		: m_Remaining(total), m_Total(total) {}
+};
+
+class CSuperPower
+{
+public:
+	int m_Radius{ 0 };
+	int m_Cooldown{ 0 };
+	int m_Remaining{0};
+	Vec2 m_Pos{0.0f,0.0f};
+	bool m_IsActive{ false };
+	int m_FadeTime{15};
+	int m_RemainingFadeTime{0};
+
+	sf::CircleShape m_Circle;
+
+	CSuperPower(int r, int c)
+		:m_Radius(r), m_Cooldown(c), m_Remaining(c), m_Circle(r, 15)
+	{
+		m_Circle.setFillColor(sf::Color(255, 255, 255, 0));
+		m_Circle.setOutlineColor(sf::Color::Red);
+		m_Circle.setOutlineThickness(2);
+		//m_Circle.setOrigin(r, r);
+	}
+
 };
 
