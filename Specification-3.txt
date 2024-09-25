@@ -1,0 +1,17 @@
+Speefiation 2
+
+Assets:
+-are loaded once at the beginning of the program and stored in the Assets class, which is stored by the GameEngine calss
+-all Assets are defined with assets.txt
+
+Note: 
+-All the entity positions denote the center of their bounding box, if it has one. This is set via sprite.setOrigin() in the Animation class constructor
+
+Player:
+-The player entity in the game is represented by Megaman, which has several different Animations: Stand, Run, and Air. You must determine which state the player currently is in and assign the correct animation.
+-the player moves with the following controls:
+	Left:A key, Right:D key, Jump:W key, Shoot:Space key.
+
+
+
+

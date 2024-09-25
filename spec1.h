@@ -93,11 +93,18 @@ static void LoadConfig(MainSettings& settings)
             }
         }
     }
+    else
+    {
+        std::cout << "no config file! " << "\n";
+    }
+
     ifs.close();
 }
 
 static void sRender(sf::RenderWindow& window)
 {
+    //std::cout << "sRender " << "\n";
+
     window.clear();
 
     for (CShape& cir : sCircles)

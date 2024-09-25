@@ -57,6 +57,9 @@ void Game::LoadConfig(const std::string& path)
 				ifs >> type;
 			}
 		}
+	
 	}
+
+
 	ifs.close();
 }

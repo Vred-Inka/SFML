@@ -68,6 +68,18 @@ void Game::sUserInput()
 			}
 		}
 
+		if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
+		{
+			/*if (m_CurrentScene()->GetActionMap().find(event.key.code)) == m_CurrentScene->GetActionMap().end())
+			continue;
+
+			const std::string actionType = (event.type == sf::Event::KeyPressed) ? "START" : "END";
+
+			m_CurrentScene()->DoAction(Action(m_CurrentScene()->GetActionMap().at(event.key.code), actionType));
+			*/
+		}
+
+
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
 			//this line ignores mouse events if Imgui is the being clicked

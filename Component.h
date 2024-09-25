@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include "helper.h"
 
+class Component {};
+
 class CTransform
 {
 public:
@@ -19,6 +21,17 @@ public:
 		m_Velocity.x = m_Speed * cos(DegToRad(m_Angle));
 		m_Velocity.y = m_Speed * sin(DegToRad(m_Angle));
 	};
+};
+
+class CBoundingBox :public Component
+{
+public:
+	Vec2 mSize{0.0f, 0.0f};
+	Vec2 mHalfSize{0.0f, 0.0f};
+
+	CBoundingBox(const Vec2& s)
+		: mSize(s), mHalfSize(s.x / 2.0f, s.y / 2.0f)
+	{}
 };
 
 class CoShape

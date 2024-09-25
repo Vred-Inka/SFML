@@ -5,6 +5,7 @@
 #include "helper.h"
 #include <random>
 #include <format>
+#include "scene.h"
 
 #include "entitymanager.h"
 #include "imgui/imgui.h"
@@ -25,6 +26,8 @@ public:
 	SPEntity m_Player;
 	sf::Font m_Font;
 	sf::Text m_Text;
+
+	std::string m_CurrentScene;
 
 	PlayerConfig m_PlayerConfig;
 	EnemyConfig m_EnemyConfig;
