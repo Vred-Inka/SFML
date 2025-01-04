@@ -1,0 +1,125 @@
+Speefiation 2
+
+Assets:
+-are loaded once at the beginning of the program and stored in the Assets class, which is stored by the GameEngine calss
+-all Assets are defined with assets.txt
+
+Note: 
+-All the entity positions denote the center of their bounding box, if it has one. This is set via sprite.setOrigin() in the Animation class constructor
+
+Player:
+-The player entity in the game is represented by Megaman, which has several different Animations: Stand, Run, and Air. You must determine which state the player currently is in and assign the correct animation.
+-the player moves with the following controls:
+ Left:A key, Right:D key, Jump:W key, Shoot:Space key.
+-Player can move left, move right, or shoot at any time  during  the game. That means that player can move left/right while in the air
+-The player can jump if it is currently standing on a title
+-If the jump key mid-jump, it should start falling back down immidiately
+-if the player moves left/right, the player's sprite will face in that direction until the other direction has been pressed
+-Bullets shot by the player travel in the direction the player is facing
+-The player collides with "Tile" entities in the level (see level syntax) and cannot move though them. The player land on a Title entity and stand in place if it falls on it from above.
+-The player does not collide with "Dec" (Decoration) entities in the level
+-If the player falls below the bottom of the screen, they respawn at the start
+-The player should have gravity component, which comstantly accelerates it downward on the screen until it collides with the title
+-The player has a maximum speed specified u=in the level file witch it should not exceed in either x or y direction
+-The player will be given a CBoundingBox of a size specified in the level file
+-The player's sprite and bounding box are centered on the player's position
+
+Animations:
+-implemented by storing multiple frames inside a texture
+-Animation class handles frame advancement based on animation speed
+-need to implement Animation::Update() to properly pprogress animations
+-need to implement Animation::HasEnded() which returns true if an animation has finished it's last frame, false otherwise
+-animations can be repeating (loop forever) or non-repeating (play once)
+-any entity with a non-repeating animation should be destroyed once its animation's hasEnded() returns true
+
+Debug 
+C -  show bb
+T - unload textures
+
+Decoration entities:
+-clouds, brushes, etc
+
+Titles:
+-entities that define the level geometry and interact with players
+-can be given an animation that is defined in assets file
+-will be given a CBoundingBox equal to size of the animation thile->GetComponent<CAnimation>().animation.GetSize()
+current animation title->GetComponent<CAnimation>().animation.GetNAme()
+- have different behavour depending on which nimation they are given
+ 
+ Brick tiles:
+  - the "Brick" animation
+  -When the brick collides with the bullet or is hit by a player from below:
+	-animation change to Explosion (non repeat)
+	-destroys when animation hasEnded() is true
+	-its bounding box component should be removed
+	
+ Question tiles:
+  - the "Question" animation	
+  - when hit by player below
+	-animation change to question2
+	-A temprorary lifespan entity with the coin animation should appear for 30 frames, 64 pixels above the location of question entity
+	
+	
+Drawing:
+- implemented. 
+
+Misc:
+-P key pause the game
+-T key toggles drawung textures
+-C key toggle drawing bounding boxes entities
+-G toggles drawing of the grid
+-ESC key should go back to the MAin Menu or Quit if on the Main Menu
+
+
+
+NOTE:
+All (GX, GY) positions given in the level specification file are given in 'grid' coordinates. The grid cells are of size 64 by 64 pixels, and the entity should be positioned such that the buttom left corner of it's texture is alligned with the bottom left corner of the given grid coordinate. Thee grid starts at (0,0) in the bottom-left of teh screen, and can be seen by pressing the 'G' key while the game is running
+
+Tile N GX GY
+ Animation name  N    std::string
+ Grid X/Y      GX,GY  float, float
+
+Dec N GX GY
+ Animation name  N    std::string
+ Grid X/Y      GX,GY  float, float
+
+Player GX GY CW CH SX SH SY SM GRW B
+ Grid X/Y        GX,GY  float, float
+ BoundingBox W/H CW,CH  float, float
+ Speed            SX    float
+ Jump speed       SY    float
+ MAX speed        SM    float
+ Gravity          GRW   float
+ Bullet animation B    float
+ 
+ 
+
+
+ 
+---------------------------------------------
+Level creation
+---------------------------------------------
+level.txt
+
+
+
+---------------------------------------------
+Assets File Specififcation
+---------------------------------------------
+Texture N P
+ Texture name     N  std::string
+ Texture filepath P  std::string
+ 
+Animation N T F S
+ Animation name  N std::string
+ Texture name    T std::string
+ Frame count     F int(number of frames in animation)
+ Anim Speed      S int(number of game frames between anim frame)
+ 
+Font N P
+ Font Name      N std::string
+ Font file path P std::string
+ 
+---------------------------------------------
+Level Specification file
+---------------------------------------------

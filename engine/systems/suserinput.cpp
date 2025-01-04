@@ -2,11 +2,6 @@
 
 void Game::sUserInput()
 {
-	//TODO:  handle the user input here
-	//	note tthat you should only be setting the player's input component variables here
-	//	you should not implement the player's movement logic here
-	//	the movement system will read the variables you set in this function
-
 	sf::Event event;
 	while (m_Window.pollEvent(event))
 	{
@@ -68,17 +63,6 @@ void Game::sUserInput()
 			}
 		}
 
-		if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
-		{
-			/*if (m_CurrentScene()->GetActionMap().find(event.key.code)) == m_CurrentScene->GetActionMap().end())
-			continue;
-
-			const std::string actionType = (event.type == sf::Event::KeyPressed) ? "START" : "END";
-
-			m_CurrentScene()->DoAction(Action(m_CurrentScene()->GetActionMap().at(event.key.code), actionType));
-			*/
-		}
-
 
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
@@ -90,14 +74,14 @@ void Game::sUserInput()
 			{
 				std::cout << "Left Mouse Button Clicked at (" << event.mouseButton.x << ","
 					<< event.mouseButton.y << ") \n";
-				SpawnBullet(m_Player, Vec2(event.mouseButton.x, event.mouseButton.y));
+				SpawnBullet(m_Player, Vec2((float)event.mouseButton.x, (float)event.mouseButton.y));
 			}
 
 			if (event.mouseButton.button == sf::Mouse::Right)
 			{
 				std::cout << "Right Mouse Button Clicked at (" << event.mouseButton.x << ","
 					<< event.mouseButton.y << ") \n";
-				ActivateSuperpower(Vec2(event.mouseButton.x, event.mouseButton.y));
+				ActivateSuperpower(Vec2((float)event.mouseButton.x, (float)event.mouseButton.y));
 			}
 
 		}

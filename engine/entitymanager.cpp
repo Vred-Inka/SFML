@@ -5,6 +5,10 @@ EntityManager::EntityManager()
 {
 }
 
+void EntityManager::Init()
+{
+}
+
 void EntityManager::Update()
 {
 	for (std::shared_ptr<Entity>& e : m_EntitiesToAdd)
@@ -26,6 +30,9 @@ void EntityManager::Update()
 //TODO
 void EntityManager::RemoveDeadEntities(EntityVec& vec)
 {	
+	if (vec.empty())
+		return;
+
 	for (int i = vec.size() - 1; i >= 0; i--)
 	{
 		if (!vec[i]->IsActive())
@@ -33,16 +40,6 @@ void EntityManager::RemoveDeadEntities(EntityVec& vec)
 			vec.erase(vec.begin() + i);
 		}
 	}
-	
-
-	/*vec.erase(std::remove_if(vec.begin(),
-		vec.end(),
-		[](SPEntity& e) 
-		{
-			return !e->IsActive();
-		}),
-		vec.end());
-		*/
 }
 
 SPEntity EntityManager::AddEntity(const std::string& tag)

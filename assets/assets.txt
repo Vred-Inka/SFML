@@ -1,0 +1,35 @@
+Texture   TexStand    assets/textures/player/stand.png
+Texture   TexRun 	  assets/textures/player/run.png
+Texture   TexAir 	  assets/textures/player/jump.png
+Texture   TexFall 	  assets/textures/player/fall.png
+Texture   TexExplode  assets/textures/misc/explosion.png
+Texture   TexBrick    assets/textures/tiles/brick.png
+Texture	  TexGround   assets/textures/tiles/ground.png
+Texture	  TexBlock	  assets/textures/tiles/block.png
+Texture   TexCoin     images/misc/coinspin.png
+Texture   TexQ 	      images/mario/qfade.png
+Texture   TexQ2 	  images/mario/question2.png
+Texture	  TexPole	  images/mario/pole.png
+Texture	  TexBushBig  images/mario/bushbig.png
+Texture	  CloudBig    images/mario/cloudbig.png
+Texture   TexPoleTop  images/mario/flagtop.png
+Texture   TexFlag 	  images/mario/flag.png
+Animation Stand      TexStand    1  0
+Animation Run      	 TexRun      12 10
+Animation Air        TexAir      1  0
+Animation Fall       TexFall     1  0
+Animation Explosion  TexExplode 48  2
+Animation Ground     TexGround   1  0
+Animation Block      TexBlock    1  0
+Animation Brick      TexBrick    1  0
+Animation Buster     TextBuster   1  0
+Animation Explosion  TextExplode 48  2
+Animation Coin       TextCoin     6  5
+Animation Question   TextQ        4 10
+Animation Flag       TextFlag    1  0
+Animation Pole       TextPole     1  0
+Animation PoleTop    TextPoleTop  1  0
+Animation BushBig    TextPoleTop  1  0
+Animation CloudBig    TextPoleTop  1  0
+Font      Tech       assets/fonts/tech.ttf
+Font      Mario      assets/fonts/Hack-Bold.ttf

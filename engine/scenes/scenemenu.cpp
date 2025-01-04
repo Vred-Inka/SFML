@@ -1,8 +1,7 @@
-#include "scene.h"
+#include "scenemenu.h"
 
-void Scene::RegisterAction(int key, const std::string& action)
+SceneMenu::SceneMenu(GameEngine* gameEngine)
 {
-	mActionMap[key] = action;
 }
 
 void SceneMenu::Init()
@@ -19,7 +18,7 @@ void SceneMenu::sDoAction(const Action& action)
 	{
 		if (action.GetName() == "UP")
 		{
-			if (m_SelectedMenuIndex > 0) 
+			if (m_SelectedMenuIndex > 0)
 			{
 				m_SelectedMenuIndex--;
 			}
@@ -43,4 +42,18 @@ void SceneMenu::sDoAction(const Action& action)
 			//OnEnd();
 		}
 	}
+}
+
+void SceneMenu::OnEnd()
+{
+}
+
+void SceneMenu::Update()
+{
+	sRender();
+}
+
+void SceneMenu::sRender()
+{
+	
 }

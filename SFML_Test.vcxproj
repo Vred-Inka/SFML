@@ -137,41 +137,58 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="action.cpp" />
-    <ClCompile Include="component.cpp" />
-    <ClCompile Include="CShape.cpp" />
-    <ClCompile Include="entity.cpp" />
-    <ClCompile Include="entitymanager.cpp" />
-    <ClCompile Include="game.cpp" />
-    <ClCompile Include="helper.cpp" />
+    <ClCompile Include="engine\action.cpp" />
+    <ClCompile Include="engine\animation.cpp" />
+    <ClCompile Include="engine\assets.cpp" />
+    <ClCompile Include="engine\components.cpp" />
+    <ClCompile Include="engine\CShape.cpp" />
+    <ClCompile Include="engine\entity.cpp" />
+    <ClCompile Include="engine\entitymanager.cpp" />
+    <ClCompile Include="engine\game.cpp" />
+    <ClCompile Include="engine\gameengine.cpp" />
+    <ClCompile Include="engine\helper.cpp" />
+    <ClCompile Include="engine\physics.cpp" />
+    <ClCompile Include="engine\RShape.cpp" />
+    <ClCompile Include="engine\scenes\sceneplay.cpp" />
+    <ClCompile Include="engine\scenes\scenemenu.cpp" />
+    <ClCompile Include="engine\scenes\scene.cpp" />
+    <ClCompile Include="engine\settings.cpp" />
     <ClCompile Include="imgui\imgui-SFML.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="RShape.cpp" />
-    <ClCompile Include="scene.cpp" />
-    <ClCompile Include="settings.cpp" />
     <ClCompile Include="SFML_Test.cpp" />
-    <ClCompile Include="Shape.cpp" />
-    <ClCompile Include="systems\scollision.cpp" />
-    <ClCompile Include="systems\senemyspawner.cpp" />
-    <ClCompile Include="systems\sgui.cpp" />
-    <ClCompile Include="systems\slifespan.cpp" />
-    <ClCompile Include="systems\smovement.cpp" />
-    <ClCompile Include="systems\sonfigloader.cpp" />
-    <ClCompile Include="systems\srender.cpp" />
-    <ClCompile Include="systems\suserinput.cpp" />
+    <ClCompile Include="engine\Shape.cpp" />
+    <ClCompile Include="engine\systems\scollision.cpp" />
+    <ClCompile Include="engine\systems\senemyspawner.cpp" />
+    <ClCompile Include="engine\systems\sgui.cpp" />
+    <ClCompile Include="engine\systems\slifespan.cpp" />
+    <ClCompile Include="engine\systems\smovement.cpp" />
+    <ClCompile Include="engine\systems\sonfigloader.cpp" />
+    <ClCompile Include="engine\systems\srender.cpp" />
+    <ClCompile Include="engine\systems\suserinput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="action.h" />
-    <ClInclude Include="component.h" />
-    <ClInclude Include="CShape.h" />
-    <ClInclude Include="entity.h" />
-    <ClInclude Include="entitymanager.h" />
-    <ClInclude Include="game.h" />
-    <ClInclude Include="helper.h" />
+    <ClInclude Include="engine\action.h" />
+    <ClInclude Include="engine\animation.h" />
+    <ClInclude Include="engine\assets.h" />
+    <ClInclude Include="engine\components.h" />
+    <ClInclude Include="engine\CShape.h" />
+    <ClInclude Include="engine\entity.h" />
+    <ClInclude Include="engine\entitymanager.h" />
+    <ClInclude Include="engine\game.h" />
+    <ClInclude Include="engine\gameengine.h" />
+    <ClInclude Include="engine\helper.h" />
+    <ClInclude Include="engine\physics.h" />
+    <ClInclude Include="engine\RShape.h" />
+    <ClInclude Include="engine\scenes\sceneplay.h" />
+    <ClInclude Include="engine\scenes\scenemenu.h" />
+    <ClInclude Include="engine\scenes\scene.h" />
+    <ClInclude Include="engine\settings.h" />
+    <ClInclude Include="engine\Shape.h" />
+    <ClInclude Include="engine\spec1.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui-SFML.h" />
     <ClInclude Include="imgui\imgui-SFML_export.h" />
@@ -180,14 +197,13 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="RShape.h" />
-    <ClInclude Include="scene.h" />
-    <ClInclude Include="settings.h" />
-    <ClInclude Include="Shape.h" />
-    <ClInclude Include="spec1.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="imgui\LICENSE.txt" />
+    <Text Include="assets\assets.txt" />
+    <Text Include="assets\config.txt" />
+    <Text Include="assets\config_1.txt" />
+    <Text Include="assets\level1.txt" />
+    <Text Include="assets\level2.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
