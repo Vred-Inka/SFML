@@ -16,8 +16,8 @@ public:
 	Vec2 m_Pos{ 0.0f, 0.0f };
 	Vec2 m_PrivPos{ 0.0f, 0.0f };
 	Vec2 m_Scale{ 1.0f, 1.0f };
-	float m_Speed{1.0f};
 	Vec2 m_Velocity{ 0.0f, 0.0f };
+	float m_Speed{ 1.0f };
 	float m_Angle{0.0f};
 
 	CTransform() {};
@@ -63,6 +63,7 @@ public:
 class CState : public Component
 {
 public:
+	Vec2 m_PrevOverlap{ 0.f, 0.f };
 	bool m_IsOnGround = false;
 	bool m_IsInAir = false;
 	bool m_IsRunning = false;
@@ -100,11 +101,23 @@ public:
 	};
 };
 
+struct Overlap
+{
+	size_t EntityID;
+	Vec2 Overlap;
+	int frame;
+};
+
 class CCollision : public Component
 {
+
 public:
+	//Overlap m_PreviousFrameOverlap;
+
 	float m_Radius{0.0f};
 	bool m_CanCollide{ true };
+
+
 	CCollision() {};
 	CCollision(float r) 
 		: m_Radius(r) {}

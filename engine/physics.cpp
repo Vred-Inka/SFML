@@ -27,40 +27,7 @@ Vec2 Physics::GetOverlap(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b, G
 
 		game.GetWindow().draw(line, 4, sf::Lines);*/
 
-		if (ox > 0 && oy > 0)
-		{
-			CBoundingBox& abbox = a->GetComponent<CBoundingBox>();
-			CTransform& atransform = a->GetComponent<CTransform>();
-			sf::RectangleShape arect;
-			arect.setSize(sf::Vector2f(abbox.m_Size.x, abbox.m_Size.y));
-			arect.setOrigin(sf::Vector2f(abbox.m_HalfSize.x, abbox.m_HalfSize.y));
-			arect.setPosition(atransform.m_Pos.x, atransform.m_Pos.y);
-			arect.setFillColor(sf::Color(0, 0, 0, 0));
-			arect.setOutlineThickness(3);
-			arect.setOutlineColor(sf::Color::Red);
-			game.GetWindow().draw(arect);
-
-
-			CBoundingBox& bbox = b->GetComponent<CBoundingBox>();
-			CTransform& transform = b->GetComponent<CTransform>();
-			sf::RectangleShape rect;
-			rect.setSize(sf::Vector2f(bbox.m_Size.x, bbox.m_Size.y));
-			rect.setOrigin(sf::Vector2f(bbox.m_HalfSize.x, bbox.m_HalfSize.y));
-			rect.setPosition(transform.m_Pos.x, transform.m_Pos.y);
-			rect.setFillColor(sf::Color(0, 0, 0, 0));
-			rect.setOutlineThickness(3);
-			rect.setOutlineColor( sf::Color::Blue);
-			game.GetWindow().draw(rect);
-
-
-			std::string s = std::to_string((int)ox) + " " + std::to_string((int)oy);
-			sf::Text text(s, game.GetAssets().GetFont("Mario"));
-			text.setCharacterSize(16);
-			text.setFillColor(sf::Color::Red);
-			text.setPosition(bPos.x - bbox.m_HalfSize.x, bPos.y - bbox.m_HalfSize.y - 20);
-			game.GetWindow().draw(text);
-
-		}
+		
 	}
 
 	return Vec2(ox, oy);

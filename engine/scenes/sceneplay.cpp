@@ -134,7 +134,7 @@ void ScenePlay::SpawnPlayer()
 	m_Player->AddComponent<CAnimation>(m_Game->GetAssets().GetAnimation("Run"), true);
 	m_Player->AddComponent<CTransform>(GridToMidPixel(m_PlayerConfig.X, m_PlayerConfig.Y, m_Player));
 	m_Player->AddComponent<CBoundingBox>(Vec2(m_PlayerConfig.W, m_PlayerConfig.H));
-	m_Player->AddComponent<CGravity>(1.5f);
+	m_Player->AddComponent<CGravity>(2.5f);
 }
 
 void ScenePlay::SpawnBullet()
@@ -220,37 +220,38 @@ void ScenePlay::sMovement()
 		bool direction = ta.m_Velocity.x > 0 ? true : false;
 		if (!e->GetComponent<CState>().m_IsInAir)
 		{
-			ta.m_Velocity.y = 0.0f;
+			//ta.m_Velocity.y = 0.0f;
 		}
 
 		if (e->GetComponent<CInput>().m_Up == true)
 		{
-			ta.m_Velocity.y -= moveSpeed;
+			ta.m_Velocity.y -= m_PlayerConfig.SPEED;
 		}
 
 		if (e->GetComponent<CInput>().m_Jump == true && !e->GetComponent<CState>().m_IsInAir)
 		{
-			ta.m_Velocity.y -= moveSpeed*30;
+			ta.m_Velocity.y += m_PlayerConfig.JUMP;
 		}
 
 		if (e->GetComponent<CInput>().m_Down == true)//s && !e->GetComponent<CState>().m_IsOnGround)
 		{
-			ta.m_Velocity.y += moveSpeed;
+			ta.m_Velocity.y += m_PlayerConfig.SPEED;
 		}
 
 		if (e->GetComponent<CInput>().m_Left == true)
 		{
-			ta.m_Velocity.x -= moveSpeed;
+			ta.m_Velocity.x -= m_PlayerConfig.SPEED;
 			e->GetComponent<CTransform>().m_Scale.x = -1;
 		}
-		else if(e->GetComponent<CInput>().m_Right == true)
+		
+		if(e->GetComponent<CInput>().m_Right == true)
 		{
-			ta.m_Velocity.x += moveSpeed;
+			ta.m_Velocity.x += m_PlayerConfig.SPEED;
 			e->GetComponent<CTransform>().m_Scale.x = 1;
 		}
 		else
 		{
-			ta.m_Velocity.x *= 0.5f;
+			//ta.m_Velocity.x *= 0.5f;
 		}
 
 		if (e->HasComponent<CGravity>() && e->GetComponent<CState>().m_IsInAir)
@@ -258,22 +259,25 @@ void ScenePlay::sMovement()
 			ta.m_Velocity.y += e->GetComponent<CGravity>().m_Gravity;
 		}
 
-		if (ta.m_Velocity.x > maxSpeed)
+		if (ta.m_Velocity.x > m_PlayerConfig.MAXSPEED)
 		{
-			ta.m_Velocity.x = maxSpeed;
+			ta.m_Velocity.x = m_PlayerConfig.MAXSPEED;
 		}
 
-		if (ta.m_Velocity.x < 0 && ta.m_Velocity.x < -maxSpeed)
+		if (ta.m_Velocity.x < 0 && ta.m_Velocity.x < -m_PlayerConfig.MAXSPEED)
 		{
-			ta.m_Velocity.x = -maxSpeed;
+			ta.m_Velocity.x = -m_PlayerConfig.MAXSPEED;
 		}
 
-		if (ta.m_Velocity.y > maxSpeed*10)
+		if (ta.m_Velocity.y > m_PlayerConfig.MAXSPEED)
 		{
-			ta.m_Velocity.y = maxSpeed;
+			ta.m_Velocity.y = m_PlayerConfig.MAXSPEED;
 		}
 
+		ta.m_PrivPos = ta.m_Pos;
 		ta.m_Pos += ta.m_Velocity;
+		ta.m_Velocity.x = 0.0f;
+		ta.m_Velocity.y = 0.0f;
 
 		if (ta.m_Pos.x < 0)
 		{
@@ -325,17 +329,123 @@ void ScenePlay::sCollision()
 {
 	bool wasInAir = m_Player->GetComponent<CState>().m_IsInAir;
 	bool isInAir = true;
+	Vec2& pos = m_Player->GetComponent<CTransform>().m_Pos;
+	const Vec2 privPos = m_Player->GetComponent<CTransform>().m_PrivPos;
 
 	for (SPEntity& e : m_EntityManager.GetEntities("Tile"))
 	{
 		Vec2 overlap = Physics::GetOverlap(m_Player, e, *m_Game);
 
-		if (overlap.x > 0 && overlap.y>0)
-		{
-			isInAir = false;
-			//std::cout << "Collide" << overlap.x << " " << overlap.y << std::endl;
+		Vec2 ePos = e->GetComponent<CTransform>().m_Pos;
 
+		{
+			CBoundingBox& abbox = m_Player->GetComponent<CBoundingBox>();
+			CTransform& atransform = m_Player->GetComponent<CTransform>();
+			sf::RectangleShape arect;
+			arect.setSize(sf::Vector2f(abbox.m_Size.x, abbox.m_Size.y));
+			arect.setOrigin(sf::Vector2f(abbox.m_HalfSize.x + 1.0f, abbox.m_HalfSize.y));
+			arect.setPosition(atransform.m_Pos.x , atransform.m_Pos.y );
+			arect.setFillColor(sf::Color(0, 0, 0, 0));
+			arect.setOutlineThickness(4);
+			arect.setOutlineColor(sf::Color::Red);
+			m_Game->GetWindow().draw(arect);
+
+			CBoundingBox& bbox = e->GetComponent<CBoundingBox>();
+			CTransform& transform = e->GetComponent<CTransform>();
+			sf::RectangleShape rect;
+			rect.setSize(sf::Vector2f(bbox.m_Size.x, bbox.m_Size.y));
+			rect.setOrigin(sf::Vector2f(bbox.m_HalfSize.x + 1.0f, bbox.m_HalfSize.y));
+			rect.setPosition(transform.m_Pos.x, transform.m_Pos.y);
+			rect.setFillColor(sf::Color(0, 0, 0, 0));
+			rect.setOutlineThickness(4);
+			rect.setOutlineColor(sf::Color::Blue);
+			m_Game->GetWindow().draw(rect);
+
+
+			std::string s = std::to_string((int)overlap.x) + " " + std::to_string((int)overlap.y);
+			sf::Text text(s, m_Game->GetAssets().GetFont("Mario"));
+			text.setCharacterSize(16);
+			text.setFillColor(sf::Color::Red);
+
+			text.setPosition(ePos.x - bbox.m_HalfSize.x, ePos.y - bbox.m_HalfSize.y - 20);
+			m_Game->GetWindow().draw(text);
 		}
+
+		Vec2& prevOverlap = e->GetComponent<CState>().m_PrevOverlap;
+
+		//doesn't overlap, skip tile
+		if (overlap == prevOverlap)
+		{
+			continue;
+		}
+
+		CBoundingBox& bbox = e->GetComponent<CBoundingBox>();
+
+		if (overlap.x > 0 && overlap.y > 0)
+		{
+			std::string s;
+
+
+			if (privPos.y < pos.y) // from top
+			{
+				s += " t";				
+				pos.y -= overlap.y;
+				isInAir = false;
+				continue;
+			}
+
+			if (privPos.y > pos.y) // from bottom
+			{
+				s += " b";
+				e->Destroy();
+				continue;
+			}
+
+			if (privPos.x < pos.x) // from right
+			{
+				s += " r";
+				pos.x -= overlap.x;
+				continue;
+			}
+
+			if (privPos.x > pos.x) // from left
+			{
+				s += " l";
+				pos.x += overlap.x;
+				continue;
+			}
+
+			sf::Text text(s, m_Game->GetAssets().GetFont("Mario"));
+			text.setCharacterSize(16);
+			text.setFillColor(sf::Color::Green);
+			Vec2 bPos = e->GetComponent<CTransform>().m_Pos;
+			text.setPosition(bPos.x - bbox.m_HalfSize.x, bPos.y - bbox.m_HalfSize.y + 20);
+			m_Game->GetWindow().draw(text);
+
+			isInAir = false;
+		}
+			CBoundingBox& abbox = m_Player->GetComponent<CBoundingBox>();
+			CTransform& atransform = m_Player->GetComponent<CTransform>();
+			sf::RectangleShape arect;
+			arect.setSize(sf::Vector2f(abbox.m_Size.x, abbox.m_Size.y));
+			arect.setOrigin(sf::Vector2f(abbox.m_HalfSize.x, abbox.m_HalfSize.y));
+			arect.setPosition(atransform.m_Pos.x, atransform.m_Pos.y);
+			arect.setFillColor(sf::Color(0, 0, 0, 0));
+			arect.setOutlineThickness(3);
+			arect.setOutlineColor(sf::Color::Red);
+			m_Game->GetWindow().draw(arect);
+
+
+			std::string s = std::to_string((int)overlap.x) + " " + std::to_string((int)overlap.y);
+			sf::Text text(s, m_Game->GetAssets().GetFont("Mario"));
+			text.setCharacterSize(14);
+			text.setFillColor(sf::Color::Blue);
+			Vec2 bPos = e->GetComponent<CTransform>().m_Pos;
+			text.setPosition(bPos.x - bbox.m_HalfSize.x, bPos.y - bbox.m_HalfSize.y - 0);
+			m_Game->GetWindow().draw(text);
+		//}
+		
+		prevOverlap = overlap;
 	}
 
 	m_Player->GetComponent<CState>().m_IsInAir = isInAir;
@@ -431,7 +541,7 @@ void ScenePlay::sRender()
 	{
 		for (SPEntity& e : m_EntityManager.GetAllEntities())
 		{
-			sf::Text text(e->GetTag(), m_Game->GetAssets().GetFont("Mario"));
+			sf::Text text(std::to_string(e->GetId()), m_Game->GetAssets().GetFont("Mario"));
 			text.setCharacterSize(14);
 			text.setFillColor(sf::Color::Red);
 			Vec2 pos = e->GetComponent<CTransform>().m_Pos;

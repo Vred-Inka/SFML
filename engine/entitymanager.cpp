@@ -33,7 +33,7 @@ void EntityManager::RemoveDeadEntities(EntityVec& vec)
 	if (vec.empty())
 		return;
 
-	for (int i = vec.size() - 1; i >= 0; i--)
+	for (int i = (int)vec.size() - 1; i >= 0; i--)
 	{
 		if (!vec[i]->IsActive())
 		{

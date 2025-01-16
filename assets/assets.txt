@@ -1,35 +1,60 @@
-Texture   TexStand    assets/textures/player/stand.png
-Texture   TexRun 	  assets/textures/player/run.png
-Texture   TexAir 	  assets/textures/player/jump.png
+Texture   TexStand    assets/textures/player/stand_test.png
+Animation Stand      TexStand    1  0
+Texture   TexRun 	  assets/textures/player/run_test.png
+Animation Run      	 TexRun      12 10
+Texture   TexAir 	  assets/textures/player/jump_test.png
+Animation Air        TexAir      1  0
 Texture   TexFall 	  assets/textures/player/fall.png
+Animation Fall       TexFall     1  0
 Texture   TexExplode  assets/textures/misc/explosion.png
+Animation Explosion  TexExplode 48  2
 Texture   TexBrick    assets/textures/tiles/brick.png
+Animation Brick      TexBrick    1  0
 Texture	  TexGround   assets/textures/tiles/ground.png
+Animation Ground     TexGround   1  0
 Texture	  TexBlock	  assets/textures/tiles/block.png
+Animation Block      TexBlock    1  0
 Texture   TexCoin     images/misc/coinspin.png
 Texture   TexQ 	      images/mario/qfade.png
 Texture   TexQ2 	  images/mario/question2.png
 Texture	  TexPole	  images/mario/pole.png
-Texture	  TexBushBig  images/mario/bushbig.png
-Texture	  CloudBig    images/mario/cloudbig.png
+Texture	  TexQuestion assets/textures/tiles/question.png
+Animation Question    TexQuestion  3 18
+Texture	  TexBushBigLeft  assets/textures/tiles/bush_triangle_left.png
+Animation BushBigLeft    TexBushBigLeft  1  0
+Texture	  TexBushBigRight  assets/textures/tiles/bush_triangle_right.png
+Animation BushBigRight    TexBushBigRight  1  0
+Texture	  TexBushBigBase  assets/textures/tiles/bush_base.png
+Animation BushBigBase    TexBushBigBase  1  0
+Texture	  TexBushBigBaseSolid  assets/textures/tiles/bush_base_solid.png
+Animation BushBigBaseSolid    TexBushBigBaseSolid  1  0
+Texture	  TexBushBigTop  assets/textures/tiles/bush_top.png
+Animation BushBigTop    TexBushBigTop  1  0
+Texture	  TexBushSmallLeft  assets/textures/tiles/bush_small_left.png
+Animation BushSmallLeft    TexBushSmallLeft  1  0
+Texture	  TexBushSmall  assets/textures/tiles/bush_small.png
+Animation BushSmall    TexBushSmall  1  0
+Texture	  TexBushSmallRight  assets/textures/tiles/bush_small_right.png
+Animation BushSmallRight    TexBushSmallRight  1  0
+Texture	  TextCloudLeftTop     assets/textures/tiles/cloud_left_top.png
+Animation CloudLeftTop   TextCloudLeftTop  1  0
+Texture	  TexCloudLeftBottom     assets/textures/tiles/cloud_left_bottom.png
+Animation CloudLeftBottom   TexCloudLeftBottom 1  0
+Texture	  TexCloudTop     assets/textures/tiles/cloud_top.png
+Animation CloudTop  TexCloudTop 1  0
+Texture	  TexCloudBottom     assets/textures/tiles/cloud_bottom.png
+Animation CloudBottom   TexCloudBottom 1  0
+Texture	  TexCloudRightTop     assets/textures/tiles/cloud_right_top.png
+Animation CloudRightTop   TexCloudRightTop 1  0
+Texture	  TexCloudRightBottom     assets/textures/tiles/cloud_right_bottom.png
+Animation CloudRightBottom   TexCloudRightBottom 1  0
 Texture   TexPoleTop  images/mario/flagtop.png
 Texture   TexFlag 	  images/mario/flag.png
-Animation Stand      TexStand    1  0
-Animation Run      	 TexRun      12 10
-Animation Air        TexAir      1  0
-Animation Fall       TexFall     1  0
-Animation Explosion  TexExplode 48  2
-Animation Ground     TexGround   1  0
-Animation Block      TexBlock    1  0
-Animation Brick      TexBrick    1  0
 Animation Buster     TextBuster   1  0
 Animation Explosion  TextExplode 48  2
 Animation Coin       TextCoin     6  5
-Animation Question   TextQ        4 10
 Animation Flag       TextFlag    1  0
 Animation Pole       TextPole     1  0
 Animation PoleTop    TextPoleTop  1  0
-Animation BushBig    TextPoleTop  1  0
-Animation CloudBig    TextPoleTop  1  0
 Font      Tech       assets/fonts/tech.ttf
 Font      Mario      assets/fonts/Hack-Bold.ttf
