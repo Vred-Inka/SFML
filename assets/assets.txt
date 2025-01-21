@@ -15,9 +15,6 @@ Animation Ground     TexGround   1  0
 Texture	  TexBlock	  assets/textures/tiles/block.png
 Animation Block      TexBlock    1  0
 Texture   TexCoin     images/misc/coinspin.png
-Texture   TexQ 	      images/mario/qfade.png
-Texture   TexQ2 	  images/mario/question2.png
-Texture	  TexPole	  images/mario/pole.png
 Texture	  TexQuestion assets/textures/tiles/question.png
 Animation Question    TexQuestion  3 18
 Texture	  TexBushBigLeft  assets/textures/tiles/bush_triangle_left.png
@@ -48,13 +45,35 @@ Texture	  TexCloudRightTop     assets/textures/tiles/cloud_right_top.png
 Animation CloudRightTop   TexCloudRightTop 1  0
 Texture	  TexCloudRightBottom     assets/textures/tiles/cloud_right_bottom.png
 Animation CloudRightBottom   TexCloudRightBottom 1  0
-Texture   TexPoleTop  images/mario/flagtop.png
-Texture   TexFlag 	  images/mario/flag.png
-Animation Buster     TextBuster   1  0
-Animation Explosion  TextExplode 48  2
-Animation Coin       TextCoin     6  5
-Animation Flag       TextFlag    1  0
-Animation Pole       TextPole     1  0
-Animation PoleTop    TextPoleTop  1  0
+Texture	  TexPipeLeft     assets/textures/tiles/pipe_left.png
+Animation PipeLeft   TexPipeLeft 1  0
+Texture	  TexPipeTopLeft     assets/textures/tiles/pipe_top_left.png
+Animation PipeTopLeft   TexPipeTopLeft 1  0
+Texture	  TexPipeRight     assets/textures/tiles/pipe_right.png
+Animation PipeRight   TexPipeRight 1  0
+Texture	  TexPipeTopRight     assets/textures/tiles/pipe_top_right.png
+Animation PipeTopRight   TexPipeTopRight 1  0
+Texture	  TexTowerBase     assets/textures/tiles/tower_base.png
+Animation TowerBase   TexTowerBase 1  0
+Texture	  TexTowerTop     assets/textures/tiles/tower_top.png
+Animation TowerTop   TexTowerTop 1  0
+Texture	  TexTowerMiddle     assets/textures/tiles/tower_middle.png
+Animation TowerMiddle   TexTowerMiddle 1  0
+Texture	  TexTowerWindowLeft     assets/textures/tiles/tower_window_left.png
+Animation TowerWindowLeft   TexTowerWindowLeft 1  0
+Texture	  TexTowerWindowRight    assets/textures/tiles/tower_window_right.png
+Animation TowerWindowRight   TexTowerWindowRight 1  0
+Texture	  TexTowerDoorBase    assets/textures/tiles/tower_door_base.png
+Animation TowerDoorBase   TexTowerDoorBase 1  0
+Texture	  TexTowerDoorTop    assets/textures/tiles/tower_door_top.png
+Animation TowerDoorTop   TexTowerDoorTop 1  0
+Texture	  TexPole   assets/textures/tiles/pole.png
+Animation Pole   TexPole 1  0
+Texture	  TexFlagBase   assets/textures/tiles/flag_base.png
+Animation FlagBase   TexFlagBase 1  0
+Texture	  TexFlagTop   assets/textures/tiles/flag_top.png
+Animation FlagTop   TexFlagTop 1  0
+Texture	  TexFlagLeft   assets/textures/tiles/flag_left.png
+Animation FlagLeft   TexFlagLeft 1  0
 Font      Tech       assets/fonts/tech.ttf
 Font      Mario      assets/fonts/Hack-Bold.ttf
